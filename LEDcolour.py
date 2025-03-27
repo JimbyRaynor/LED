@@ -4,8 +4,8 @@ import re
 
 
 mainwin = Tk(className = " LED Simulator")
-mainwin.geometry("800x680")
-canvas1 = Canvas(mainwin,width = 800, height = 600, bg = "black")
+mainwin.geometry("1200x880")
+canvas1 = Canvas(mainwin,width = 1200, height = 880, bg = "black")
 canvas1.place(x=-1,y=-1)
 
 psize = 3
@@ -38,21 +38,21 @@ class ButtonManager:
             textOutput.insert(INSERT,"("+str(b.x)+","+str(b.y)+")")
             if b != whitebuttons[-1]:
                textOutput.insert(INSERT,", ")
-        LEDlib.createChar(canvas1,170, 170, whitebuttonsxy,LEDpoints)
+        LEDlib.createChar(canvas1,10, 10, whitebuttonsxy,LEDpoints)
 
 
 buttons = []
-for i in range(8):
-    for j in range(8):
+for i in range(24):
+    for j in range(24):
       button = Button(mainwin, text=" ", bg="black", fg="white")
-      button.place(x=i*40+400,y=20+j*40+100)
+      button.place(x=i*35+200,y=20+j*30+10)
       buttons.append(ButtonManager(button,i,j))
 
 
 textInput = Text(mainwin,width=80,height=6,bg="black",fg="yellow")
-textInput.place(x=0,y=480)
+textInput.place(x=0,y=750)
 textOutput = Text(mainwin,width=80,height=6,bg="black",fg="orange")
-textOutput.place(x=0,y=580)
+textOutput.place(x=600,y=750)
 
 def cleargrid():
      for b in buttons:
@@ -70,14 +70,13 @@ def ReadData():
        if (b.x,b.y) in coordinates:
           b.toggle_color()
        
-def Erase():
-    LEDlib.Erasepoints(canvas1,LEDpoints)
-
 btnRead = Button(mainwin,text="READ", bg="black", fg="white", command = ReadData)
 btnRead.place(x=100,y=400)
 
+def Erase():
+    LEDlib.Erasepoints(canvas1,LEDpoints)
+
 btnErase = Button(mainwin,text="Erase", bg="black", fg="white", command = Erase)
 btnErase.place(x=100,y=500)
-
 
 mainwin.mainloop()
