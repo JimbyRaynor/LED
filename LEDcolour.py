@@ -8,7 +8,7 @@ mainwin.geometry("1200x880")
 canvas1 = Canvas(mainwin,width = 1200, height = 880, bg = "black")
 canvas1.place(x=-1,y=-1)
 
-psize = 3
+psize = 12
 
 LEDpoints = []
     
