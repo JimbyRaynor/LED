@@ -1,5 +1,6 @@
 
 psize = 3
+charwidth = 23
 
 ONE = [(1,6), (2,1), (2,6), (3,0), (3,1), (3,2), (3,3), (3,4), (3,5), (3,6), (4,0), (4,1), (4,2), (4,3), (4,4), (4,5), (4,6), (5,6), (6,6)]
 ZERO = [(0,2), (0,3), (0,4), (0,5), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,3), (2,6), (3,0), (3,3), (3,6), (4,0), (4,2), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,1), (6,2), (6,3), (6,4), (6,5)]
@@ -12,6 +13,35 @@ SEVEN = [(0,0), (0,1), (1,0), (1,1), (2,0), (2,5), (2,6), (3,0), (3,3), (3,4), (
 EIGHT = [(0,1), (0,4), (0,5), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,3), (2,6), (3,0), (3,3), (3,6), (4,0), (4,3), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,1), (6,2), (6,4), (6,5)]
 NINE = [(0,1), (0,2), (0,5), (1,0), (1,1), (1,2), (1,3), (1,5), (1,6), (2,0), (2,3), (2,6), (3,0), (3,3), (3,6), (4,0), (4,3), (4,5), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (6,1), (6,2), (6,3), (6,4)]
 
+# leave rightmost column blank
+# leave bottom row blank  
+charA = []
+charB = []
+charC = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,0), (3,6), (4,0), (4,6), (5,0), (5,1), (5,5), (5,6), (6,0), (6,1), (6,5), (6,6)]
+charD = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,0), (3,6), (4,0), (4,1), (4,6), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,2), (6,3), (6,4), (6,5), (6,6)]
+charE = [(0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,0), (3,3), (3,6), (4,0), (4,3), (4,6), (5,0), (5,6), (6,0), (6,1), (6,5), (6,6)]
+charF = []
+charG = []
+charH = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,3), (4,3), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,0), (6,1), (6,2), (6,3), (6,4), (6,5), (6,6)]
+charI = [(1,0), (1,6), (2,0), (2,4), (2,5), (2,6), (3,0), (3,1), (3,2), (3,3), (3,4), (3,5), (3,6), (4,0), (4,1), (4,2), (4,3), (4,4), (4,5), (4,6), (5,0), (5,6)]
+charJ = []
+charK = []
+charL = []
+charM = []
+charN = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,1), (3,2), (3,3), (4,2), (4,3), (4,4), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,0), (6,1), (6,2), (6,3), (6,4), (6,5), (6,6)]
+charO = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,0), (3,6), (4,0), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,0), (6,1), (6,2), (6,3), (6,4), (6,5), (6,6)]
+charP = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,0), (3,3), (4,0), (4,3), (5,0), (5,1), (5,2), (5,3), (6,0), (6,1), (6,2), (6,3)]
+charQ = []
+charR = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,0), (3,3), (3,4), (4,0), (4,3), (4,4), (4,5), (5,0), (5,1), (5,2), (5,3), (5,5), (5,6), (6,1), (6,2), (6,6)]
+charS = [(0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,5), (2,6), (3,0), (3,3), (3,6), (4,0), (4,3), (4,6), (5,0), (5,1), (5,3), (5,4), (5,5), (5,6), (6,0), (6,1), (6,3), (6,4), (6,5), (6,6)]
+charT = [(1,0), (2,0), (2,4), (2,5), (2,6), (3,0), (3,1), (3,2), (3,3), (3,4), (3,5), (3,6), (4,0), (4,1), (4,2), (4,3), (4,4), (4,5), (4,6), (5,0), (6,0)]
+charU = []
+charV = []
+charW = []
+charX = []
+charY = []
+charZ = []
+
 
 def createLED(canvas, x,y, LEDpoints):
  p1 = canvas.create_rectangle(x, y, x+psize, y+psize, fill="black")
@@ -19,16 +49,36 @@ def createLED(canvas, x,y, LEDpoints):
  LEDpoints.append(p1)
  LEDpoints.append(p2)
 
+def createLEDcolour(canvas, x,y, colour, LEDpoints):
+ p1 = canvas.create_rectangle(x, y, x+psize, y+psize, fill="black")
+ p2 = canvas.create_oval(x, y, x+psize, y+psize, fill=colour)
+ LEDpoints.append(p1)
+ LEDpoints.append(p2)
+
 def createChar(canvas,x,y,points, LEDpoints):
   canvas.create_rectangle(x, y, x+psize*8, y+psize*8, fill="black")
   for p in points:
     createLED(canvas,x+p[0]*psize,y+p[1]*psize, LEDpoints)
+
+def createCharColour(canvas,x,y,colourpoints, LEDpoints):
+  canvas.create_rectangle(x, y, x+psize*8, y+psize*8, fill="black")
+  for p in colourpoints:
+    createLEDcolour(canvas,x+p[0]*psize,y+p[1]*psize,p[2], LEDpoints)
   
+# From Copilot: enumerate is a built-in Python function that makes iteration more convenient when you need both 
+# an index and the value of an iterable (like a list or string).
+def ShowText(canvas,x,y,mytext, LEDpoints):
+    charactermap = [charA,charB,charC,charD,charE,charF,charG,charH,charI,charJ,charK,charL,charM,charN,charO,charP,charQ,charR,charS,charT,charU,charV,charW,charX,charY,charZ] 
+    for i,c in enumerate(mytext):  # i=0 pairs with c = first char in mytext, i = 1 pairs with c = second char, etc
+       createChar(canvas,x+i*charwidth,y,charactermap[ord(c)-65], LEDpoints)
+
 def ShowScore(canvas,x,y,myscore, LEDpoints):
     digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
-    stringscore = str(myscore).zfill(10) 
-    for i in range(len(stringscore)):
-       createChar(canvas,x+i*25,y,digits[int(stringscore[i])], LEDpoints)
+    stringscore = str(myscore).zfill(9) 
+    for i,c in enumerate(stringscore):
+       createChar(canvas,x+i*charwidth,y,digits[int(c)], LEDpoints)
+
+        
           
 def Erasepoints(canvas,LEDpoints):
     for p in LEDpoints:
