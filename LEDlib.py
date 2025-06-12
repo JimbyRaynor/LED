@@ -56,12 +56,12 @@ def createLEDcolour(canvas, x,y, colour, LEDpoints):
  LEDpoints.append(p2)
 
 def createChar(canvas,x,y,points, LEDpoints):
-  canvas.create_rectangle(x, y, x+psize*8, y+psize*8, fill="black")
+  prect = canvas.create_rectangle(x, y, x+psize*8, y+psize*8, fill="black") # erase background for new char
+  LEDpoints.append(prect)
   for p in points:
     createLED(canvas,x+p[0]*psize,y+p[1]*psize, LEDpoints)
 
 def createCharColour(canvas,x,y,colourpoints, LEDpoints):
-  canvas.create_rectangle(x, y, x+psize*8, y+psize*8, fill="black")
   for p in colourpoints:
     createLEDcolour(canvas,x+p[0]*psize,y+p[1]*psize,p[2], LEDpoints)
   
