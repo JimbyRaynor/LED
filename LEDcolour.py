@@ -57,6 +57,7 @@ class ButtonManager:
         self.button.config(command=self.toggle_color, activebackground="black")
 
     def toggle_color(self):
+        global LEDpoints
         self.button.config(bg=selectedColour, activebackground=selectedColour)
         self.colour = selectedColour
         textOutput.delete("1.0","end-1c")
@@ -70,6 +71,8 @@ class ButtonManager:
             textOutput.insert(INSERT,"("+str(b.x)+","+str(b.y)+",\""+str(b.colour)+"\")")
             if b != whitebuttons[-1]:
                textOutput.insert(INSERT,", ")
+        LEDlib.Erasepoints(canvas1,LEDpoints)
+        LEDpoints = []
         LEDlib.createCharColour(canvas1,10, 10, whitebuttonsxy,LEDpoints)
 
 
