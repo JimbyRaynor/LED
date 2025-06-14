@@ -55,16 +55,41 @@ def createLEDcolour(canvas, x,y, colour, LEDpoints):
  LEDpoints.append(p1)
  LEDpoints.append(p2)
 
+# white char
 def createChar(canvas,x,y,points, LEDpoints):
   prect = canvas.create_rectangle(x, y, x+psize*8, y+psize*8, fill="black") # erase background for new char
   LEDpoints.append(prect)
   for p in points:
     createLED(canvas,x+p[0]*psize,y+p[1]*psize, LEDpoints)
 
+# All one colour char
+def createCharBlockColour(canvas,x,y,colour, points, LEDpoints):
+  prect = canvas.create_rectangle(x, y, x+psize*8, y+psize*8, fill="black") # erase background for new char
+  LEDpoints.append(prect)
+  for p in points:
+    createLEDcolour(canvas,x+p[0]*psize,y+p[1]*psize, colour, LEDpoints)    
+
+# Multi-Colour char
 def createCharColour(canvas,x,y,colourpoints, LEDpoints):
   for p in colourpoints:
     createLEDcolour(canvas,x+p[0]*psize,y+p[1]*psize,p[2], LEDpoints)
   
+def pixelline(canvas,x,y,dx,dy,n,colour, LEDpoints):
+   for i in range(n):
+       createLEDcolour(canvas, x+i*dx*psize,y+i*dy*psize,colour, LEDpoints)
+
+def pixellinedouble(canvas,x,y,dx,dy,n,colour, LEDpoints):
+   for i in range(n):
+       createLEDcolour(canvas, x+i*dx*psize,y+i*dy*psize,colour, LEDpoints)
+       createLEDcolour(canvas, x+i*dx*psize+dy*psize,y+i*dy*psize+dx*psize,colour, LEDpoints)
+
+def pixellinetriple(canvas,x,y,dx,dy,n,colour, LEDpoints):
+   for i in range(n):
+       createLEDcolour(canvas, x+i*dx*psize,y+i*dy*psize,colour, LEDpoints)
+       createLEDcolour(canvas, x+i*dx*psize+dy*psize,y+i*dy*psize+dx*psize,colour, LEDpoints)
+       createLEDcolour(canvas, x+i*dx*psize+2*dy*psize,y+i*dy*psize+2*dx*psize,colour, LEDpoints)
+          
+
 # From Copilot: enumerate is a built-in Python function that makes iteration more convenient when you need both 
 # an index and the value of an iterable (like a list or string).
 def ShowText(canvas,x,y,mytext, LEDpoints):
@@ -78,7 +103,10 @@ def ShowScore(canvas,x,y,myscore, LEDpoints):
     for i,c in enumerate(stringscore):
        createChar(canvas,x+i*charwidth,y,digits[int(c)], LEDpoints)
 
-        
+def ShowColourText(canvas,x,y,colour, mytext, LEDpoints):
+    charactermap = [charA,charB,charC,charD,charE,charF,charG,charH,charI,charJ,charK,charL,charM,charN,charO,charP,charQ,charR,charS,charT,charU,charV,charW,charX,charY,charZ] 
+    for i,c in enumerate(mytext):  # i=0 pairs with c = first char in mytext, i = 1 pairs with c = second char, etc
+       createCharBlockColour(canvas,x+i*charwidth,y,colour, charactermap[ord(c)-65], LEDpoints)       
           
 def Erasepoints(canvas,LEDpoints):
     for p in LEDpoints:
