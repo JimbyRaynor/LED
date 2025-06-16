@@ -17,22 +17,63 @@ colourRed   = "#FF0000"
 colourWhite = "#FFFFFF"
 colourBlack = "#000000"
 colourBlue  = "#0000FF"
+colourGrey  = "#AAAAAA"
+colourPink  = "#F498EC"
+colourGreen = "#279627"
+colourOrange = "#FF5900"
+colourYellow = "#FFFF00"
 
 selectedColour = colourWhite
+
+
+def chooseYellow():
+   global selectedColour
+   selectedColour = colourYellow
+
+btnYellow = Button(mainwin,text="YELLOW", bg="black", fg="white", command = chooseYellow)
+btnYellow.place(x=100,y=275)
+
+def chooseGrey():
+   global selectedColour
+   selectedColour = colourGrey
+
+btnGrey = Button(mainwin,text="GREY", bg="black", fg="white", command = chooseGrey)
+btnGrey.place(x=100,y=250)
+
+def choosePink():
+   global selectedColour
+   selectedColour = colourPink
+
+btnPink = Button(mainwin,text="PINK", bg="black", fg="white", command = choosePink)
+btnPink.place(x=100,y=225)
+
+def chooseGreen():
+   global selectedColour
+   selectedColour = colourGreen
+
+btnGreen = Button(mainwin,text="GREEN", bg="black", fg="white", command = chooseGreen)
+btnGreen.place(x=100,y=200)
+
+def chooseOrange():
+   global selectedColour
+   selectedColour = colourOrange
+
+btnOrange = Button(mainwin,text="ORANGE", bg="black", fg="white", command = chooseOrange)
+btnOrange.place(x=100,y=175)
 
 def chooseRed():
    global selectedColour
    selectedColour = colourRed
 
 btnRed = Button(mainwin,text="RED", bg="black", fg="white", command = chooseRed)
-btnRed.place(x=100,y=300)   
+btnRed.place(x=100,y=150)   
 
 def chooseBlue():
    global selectedColour
    selectedColour = colourBlue
 
 btnBlue = Button(mainwin,text="BLUE", bg="black", fg="white", command = chooseBlue)
-btnBlue.place(x=100,y=200) 
+btnBlue.place(x=100,y=125) 
 
 def chooseWhite():
    global selectedColour

@@ -52,6 +52,7 @@ def createLED(canvas, x,y, LEDpoints):
 def createLEDcolour(canvas, x,y, colour, LEDpoints):
  p1 = canvas.create_rectangle(x, y, x+psize, y+psize, fill="black")
  p2 = canvas.create_oval(x, y, x+psize, y+psize, fill=colour)
+ #p2 = canvas.create_rectangle(x, y, x+psize-1, y+psize-1, fill=colour)
  LEDpoints.append(p1)
  LEDpoints.append(p2)
 
