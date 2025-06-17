@@ -56,6 +56,10 @@ def createLEDcolour(canvas, x,y, colour, LEDpoints):
  LEDpoints.append(p1)
  LEDpoints.append(p2)
 
+def createLEDcolourSolid(canvas, x,y, colour, LEDpoints):
+ p2 = canvas.create_rectangle(x, y, x+psize, y+psize, fill=colour, outline = "")
+ LEDpoints.append(p2)
+
 # white char
 def createChar(canvas,x,y,points, LEDpoints):
   prect = canvas.create_rectangle(x, y, x+psize*8, y+psize*8, fill="black") # erase background for new char
@@ -74,6 +78,10 @@ def createCharBlockColour(canvas,x,y,colour, points, LEDpoints):
 def createCharColour(canvas,x,y,colourpoints, LEDpoints):
   for p in colourpoints:
     createLEDcolour(canvas,x+p[0]*psize,y+p[1]*psize,p[2], LEDpoints)
+
+def createCharColourSolid(canvas,x,y,colourpoints, LEDpoints):
+  for p in colourpoints:
+    createLEDcolourSolid(canvas,x+p[0]*psize,y+p[1]*psize,p[2], LEDpoints)
   
 def pixelline(canvas,x,y,dx,dy,n,colour, LEDpoints):
    for i in range(n):
