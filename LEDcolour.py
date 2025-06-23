@@ -20,11 +20,70 @@ colourBlue  = "#0000FF"
 colourGrey  = "#AAAAAA"
 colourPink  = "#F498EC"
 colourGreen = "#279627"
+colourGreenLight = "#90EE90"
 colourOrange = "#FF5900"
+colourOrangeLight = "#FFA07A"
 colourYellow = "#FFFF00"
+colourBrown = "#8B4513"
+colourBrownLight = "#C19153"
+colourAqua = "#00FFFF"
+colourPurple = "#BE1CBE"
 
 selectedColour = colourWhite
 
+
+
+def CopyText():
+   textOutput.tag_add('sel','1.0','end')
+   selected_text = textOutput.get(SEL_FIRST, SEL_LAST)
+   mainwin.clipboard_clear()
+   mainwin.clipboard_append(selected_text)
+
+btnCopyText = Button(mainwin,text="Copy the above pixel text to clipboard", bg="black", fg="white", command = CopyText)
+btnCopyText.place(x=700,y=840)
+
+
+def chooseGreenLight():
+   global selectedColour
+   selectedColour = colourGreenLight
+
+btnGreenLight = Button(mainwin,text="LIGHT GREEN", bg="black", fg="white", command = chooseGreenLight)
+btnGreenLight.place(x=100,y=400)
+
+def chooseOrangeLight():
+   global selectedColour
+   selectedColour = colourOrangeLight
+
+btnOrangeLight = Button(mainwin,text="LIGHT ORANGE", bg="black", fg="white", command = chooseOrangeLight)
+btnOrangeLight.place(x=100,y=425)
+
+def chooseBrownLight():
+   global selectedColour
+   selectedColour = colourBrownLight
+
+btnBrownLight = Button(mainwin,text="LIGHT BROWN", bg="black", fg="white", command = chooseBrownLight)
+btnBrownLight.place(x=100,y=325)
+
+def chooseAqua():
+   global selectedColour
+   selectedColour = colourAqua
+
+btnAqua = Button(mainwin,text="AQUA", bg="black", fg="white", command = chooseAqua)
+btnAqua.place(x=100,y=350)
+
+def choosePurple():
+   global selectedColour
+   selectedColour = colourPurple
+
+btnPurple = Button(mainwin,text="PURPLE", bg="black", fg="white", command = choosePurple)
+btnPurple.place(x=100,y=375)
+
+def chooseBrown():
+   global selectedColour
+   selectedColour = colourBrown
+
+btnBrown = Button(mainwin,text="BROWN", bg="black", fg="white", command = chooseBrown)
+btnBrown.place(x=100,y=300)
 
 def chooseYellow():
    global selectedColour
@@ -150,8 +209,8 @@ def ReadData():
           b.colour = selectedColour
           b.toggle_color()
        
-btnRead = Button(mainwin,text="READ", bg="black", fg="white", command = ReadData)
-btnRead.place(x=100,y=400)
+btnRead = Button(mainwin,text="READ from this text", bg="black", fg="white", command = ReadData)
+btnRead.place(x=50,y=720)
 
 def Erase():
     LEDlib.Erasepoints(canvas1,LEDpoints)
