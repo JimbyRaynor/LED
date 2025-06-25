@@ -17,6 +17,7 @@ colourRed   = "#FF0000"
 colourWhite = "#FFFFFF"
 colourBlack = "#000000"
 colourBlue  = "#0000FF"
+colourBlueLight = "#B5B3F5"
 colourGrey  = "#AAAAAA"
 colourPink  = "#F498EC"
 colourGreen = "#279627"
@@ -26,6 +27,7 @@ colourOrangeLight = "#FFA07A"
 colourYellow = "#FFFF00"
 colourBrown = "#8B4513"
 colourBrownLight = "#C19153"
+colourBrownDark = "#4C3A23"
 colourAqua = "#00FFFF"
 colourPurple = "#BE1CBE"
 
@@ -42,6 +44,13 @@ def CopyText():
 btnCopyText = Button(mainwin,text="Copy the above pixel text to clipboard", bg="black", fg="white", command = CopyText)
 btnCopyText.place(x=700,y=840)
 
+
+def chooseBrownDark():
+   global selectedColour
+   selectedColour = colourBrownDark
+
+btnBrownDark = Button(mainwin,text="Dark Brown", bg="black", fg="white", command = chooseBrownDark)
+btnBrownDark.place(x=20,y=300)
 
 def chooseGreenLight():
    global selectedColour
@@ -133,6 +142,13 @@ def chooseBlue():
 
 btnBlue = Button(mainwin,text="BLUE", bg="black", fg="white", command = chooseBlue)
 btnBlue.place(x=100,y=125) 
+
+def chooseBlueLight():
+   global selectedColour
+   selectedColour = colourBlueLight
+
+btnBlueLight = Button(mainwin,text="light blue", bg="black", fg="white", command = chooseBlueLight)
+btnBlueLight.place(x=20,y=125) 
 
 def chooseWhite():
    global selectedColour
