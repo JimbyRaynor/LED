@@ -1,4 +1,7 @@
 
+# TODO
+# Make load/save easier
+
 psize = 3
 charwidth = 23
 
@@ -26,7 +29,7 @@ charH = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (
 charI = [(1,0), (1,6), (2,0), (2,4), (2,5), (2,6), (3,0), (3,1), (3,2), (3,3), (3,4), (3,5), (3,6), (4,0), (4,1), (4,2), (4,3), (4,4), (4,5), (4,6), (5,0), (5,6)]
 charJ = []
 charK = []
-charL = []
+charL = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,6), (4,6), (5,6), (6,5), (6,6)]
 charM = []
 charN = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,1), (3,2), (3,3), (4,2), (4,3), (4,4), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,0), (6,1), (6,2), (6,3), (6,4), (6,5), (6,6)]
 charO = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,0), (3,6), (4,0), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,0), (6,1), (6,2), (6,3), (6,4), (6,5), (6,6)]
@@ -36,7 +39,7 @@ charR = [(0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (
 charS = [(0,5), (0,6), (1,0), (1,1), (1,2), (1,3), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,5), (2,6), (3,0), (3,3), (3,6), (4,0), (4,3), (4,6), (5,0), (5,1), (5,3), (5,4), (5,5), (5,6), (6,0), (6,1), (6,3), (6,4), (6,5), (6,6)]
 charT = [(1,0), (2,0), (2,4), (2,5), (2,6), (3,0), (3,1), (3,2), (3,3), (3,4), (3,5), (3,6), (4,0), (4,1), (4,2), (4,3), (4,4), (4,5), (4,6), (5,0), (6,0)]
 charU = []
-charV = []
+charV = [(0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,3), (2,4), (2,5), (2,6), (3,5), (3,6), (4,3), (4,4), (4,5), (5,0), (5,1), (5,2), (5,3), (5,4), (6,0), (6,1), (6,2)]
 charW = []
 charX = []
 charY = []
@@ -106,11 +109,17 @@ def ShowText(canvas,x,y,mytext, LEDpoints):
     for i,c in enumerate(mytext):  # i=0 pairs with c = first char in mytext, i = 1 pairs with c = second char, etc
        createChar(canvas,x+i*charwidth,y,charactermap[ord(c)-65], LEDpoints)
 
-def ShowScore(canvas,x,y,myscore, LEDpoints):
+def ShowScore(canvas,x,y,myscore, LEDpoints,numzeros=9):
     digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
-    stringscore = str(myscore).zfill(9) 
+    stringscore = str(myscore).zfill(numzeros) 
     for i,c in enumerate(stringscore):
        createChar(canvas,x+i*charwidth,y,digits[int(c)], LEDpoints)
+
+def ShowColourScore(canvas,x,y,colour, myscore, LEDpoints,numzeros=9):
+    digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
+    stringscore = str(myscore).zfill(numzeros) 
+    for i,c in enumerate(stringscore):
+       createCharBlockColour(canvas,x+i*charwidth,y,colour,digits[int(c)], LEDpoints)
 
 def ShowColourText(canvas,x,y,colour, mytext, LEDpoints):
     charactermap = [charA,charB,charC,charD,charE,charF,charG,charH,charI,charJ,charK,charL,charM,charN,charO,charP,charQ,charR,charS,charT,charU,charV,charW,charX,charY,charZ] 

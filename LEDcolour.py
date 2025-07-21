@@ -189,7 +189,14 @@ class ButtonManager:
                textOutput.insert(INSERT,", ")
         LEDlib.Erasepoints(canvas1,LEDpoints)
         LEDpoints = []
+        LEDlib.psize = 3
         LEDlib.createCharColour(canvas1,10, 10, whitebuttonsxy,LEDpoints)
+        LEDlib.createCharColourSolid(canvas1,1100, 10, whitebuttonsxy,LEDpoints)
+        LEDlib.psize = 2
+        LEDlib.createCharColourSolid(canvas1,1100, 200, whitebuttonsxy,LEDpoints)
+        LEDlib.psize = 1
+        LEDlib.createCharColourSolid(canvas1,1100, 400, whitebuttonsxy,LEDpoints)
+
 
 
 buttons = []
@@ -212,6 +219,7 @@ def cleargrid():
 
 def ReadData():
     global selectedColour
+    count = 0
     cleargrid()
     coordinate_string = textInput.get("1.0", END)
     # Regular expression to extract pairs of numbers
@@ -222,8 +230,10 @@ def ReadData():
        for b in buttons:
          if b.x == x and b.y == y:
           selectedColour = z
+          count = count + 1
           b.colour = selectedColour
           b.toggle_color()
+          print("reading ...", count)
        
 btnRead = Button(mainwin,text="READ from this text", bg="black", fg="white", command = ReadData)
 btnRead.place(x=50,y=720)
