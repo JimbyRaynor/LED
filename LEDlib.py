@@ -44,7 +44,9 @@ charW = [(0,0), (0,1), (0,2), (0,3), (0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (
 charX = [(1,0), (1,1), (1,5), (1,6), (2,0), (2,1), (2,2), (2,4), (2,5), (2,6), (3,2), (3,3), (3,4), (4,2), (4,3), (4,4), (5,0), (5,1), (5,2), (5,4), (5,5), (5,6), (6,0), (6,1), (6,5), (6,6)]
 charY = [(1,0), (1,1), (2,0), (2,1), (2,2), (3,2), (3,3), (3,4), (3,5), (3,6), (4,2), (4,3), (4,4), (4,5), (4,6), (5,0), (5,1), (5,2), (6,0), (6,1)]
 charZ = [(1,0), (1,1), (1,5), (1,6), (2,0), (2,4), (2,5), (2,6), (3,0), (3,3), (3,4), (3,6), (4,0), (4,2), (4,3), (4,6), (5,0), (5,1), (5,2), (5,6), (6,0), (6,1), (6,5), (6,6)]
-
+charPercent = [(1,0), (1,1), (1,5), (2,0), (2,1), (2,4), (3,3), (4,2), (4,5), (4,6), (5,1), (5,5), (5,6)]
+charDot = [(3,5), (3,6), (4,5), (4,6)]
+charColon = [(3,1), (3,2), (3,5), (3,6), (4,1), (4,2), (4,5), (4,6)]
 
 def createLED(canvas, x,y, LEDpoints):
  p1 = canvas.create_rectangle(x, y, x+psize, y+psize, fill="black")
@@ -145,11 +147,18 @@ def ShowColourText(canvas,x,y,colour, mytext, LEDpoints):
 
 def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = True):
     digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
+    mytext = mytext.upper()
     charactermap = [charA,charB,charC,charD,charE,charF,charG,charH,charI,charJ,charK,charL,charM,charN,charO,charP,charQ,charR,charS,charT,charU,charV,charW,charX,charY,charZ] 
     for i,c in enumerate(mytext):  # i=0 pairs with c = first char in mytext, i = 1 pairs with c = second char, etc
        if c != ' ':
           if c in "0123456789":
             createCharBlockColour2(canvas,x+i*charwidth,y,colour,digits[int(c)], LEDpoints, solid = solid, bg = bg)
+          elif c == "%":
+            createCharBlockColour2(canvas,x+i*charwidth,y,colour,charPercent, LEDpoints, solid = solid, bg = bg)
+          elif c == ".":
+            createCharBlockColour2(canvas,x+i*charwidth,y,colour,charDot, LEDpoints, solid = solid, bg = bg)
+          elif c == ":":
+            createCharBlockColour2(canvas,x+i*charwidth,y,colour,charColon, LEDpoints, solid = solid, bg = bg)
           else:
             createCharBlockColour2(canvas,x+i*charwidth,y,colour, charactermap[ord(c)-65], LEDpoints, solid = solid, bg = bg)      
           
@@ -158,3 +167,29 @@ def Erasepoints(canvas,LEDpoints):
       canvas.delete(p)
 
 
+class LEDtextobj:
+    def __init__(self, canvas,x=0,y=0, text = "", colour = "white", pixelsize = 2, charwidth=23, solid = False, bg = False):
+         self.x = x
+         self.y = y
+         self.text = text
+         self.canvas = canvas
+         self.LEDPoints = []
+         self.colour = colour
+         self.pixelsize = pixelsize
+         self.charwidth = charwidth
+         self.solid = solid
+         self.bg = bg
+         self.draw()
+    def draw(self):
+        global charwidth, psize
+        self.undraw()
+        charwidth = self.charwidth
+        psize = self.pixelsize
+        ShowColourText2(self.canvas,self.x,self.y,self.colour,self.text,self.LEDPoints, self.solid, self.bg) 
+    def undraw(self):
+         for p in self.LEDPoints:
+            self.canvas.delete(p)
+         self.LEDPoints.clear()
+    def update(self,mytext):
+        self.text = mytext
+        self.draw()
