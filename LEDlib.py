@@ -1,3 +1,5 @@
+import math
+
 
 # TODO
 # Make load/save easier
@@ -159,7 +161,7 @@ def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = Tr
             createCharBlockColour2(canvas,x+i*charwidth,y,colour,charDot, LEDpoints, solid = solid, bg = bg)
           elif c == ":":
             createCharBlockColour2(canvas,x+i*charwidth,y,colour,charColon, LEDpoints, solid = solid, bg = bg)
-          else:
+          elif ord(c)-65 >= 0 and ord(c)-65 < len(charactermap):
             createCharBlockColour2(canvas,x+i*charwidth,y,colour, charactermap[ord(c)-65], LEDpoints, solid = solid, bg = bg)      
           
 def Erasepoints(canvas,LEDpoints):
@@ -193,3 +195,95 @@ class LEDtextobj:
     def update(self,mytext):
         self.text = mytext
         self.draw()
+
+
+def rotatepoints(points,angle,center):
+         newpoints = []
+         anglerad = math.radians(angle)
+         cx,cy = center
+         for x,y,z in points:
+              x = x - cx
+              y = y - cy
+              newx = x* math.cos(anglerad)- y*math.sin(anglerad) + cx
+              newy = x * math.sin(anglerad) + y*math.cos(anglerad) + cy
+              newpoints.append((newx,newy,z))
+         return newpoints
+
+class LEDobj:
+    def __init__(self, canvas,x=0,y=0,dx=0,dy=0, CharPoints = [], pixelsize = 2, typestring = "unknown"):
+         global psize
+         self.x = x
+         self.y = y
+         self.dx = dx
+         self.dy = dy
+         self.canvas = canvas
+         self.typestring = typestring
+         self.LEDPoints = []
+         self.OriginalCharPoints = CharPoints
+         self.CharPoints = CharPoints.copy()
+         self.PointsType = 0
+         self.collisionrect = (0,0,0,0)  # top left to bottom right
+         self.collisionimage = 0
+         self.collisionrectshow = False
+         self.pixelsize = pixelsize
+         psize = self.pixelsize
+         createCharColourSolid(canvas,x,y,CharPoints,self.LEDPoints)
+    def resetposition(self,x,y):
+        self.x, self.y = x,y
+        self.dx, self.dy = 0,0
+        self.draw()
+    def undraw(self):
+         for p in self.LEDPoints:
+            self.canvas.delete(p)
+         self.LEDPoints.clear()
+    def draw(self):
+        global psize
+        self.undraw()
+        psize = self.pixelsize
+        createCharColourSolid(self.canvas,self.x,self.y,self.CharPoints,self.LEDPoints)
+        if self.collisionrectshow:
+              self.canvas.delete(self.collisionimage)
+              self.showcollisionrect() 
+    def move(self): 
+         self.x = self.x + self.dx
+         self.y = self.y + self.dy
+         self.draw()
+    def rotate(self,angledeg):
+         centerx = sum(x for x,y,z in self.OriginalCharPoints)/len(self.OriginalCharPoints)
+         centery = sum(y for x,y,z in self.OriginalCharPoints)/len(self.OriginalCharPoints)
+         self.CharPoints = rotatepoints(self.OriginalCharPoints,angle=angledeg,center=(centerx,centery))
+         self.draw()
+    def showcollisionrect(self):
+         self.collisionrectshow = True
+         x1,y1,x2,y2 = self.collisionrect 
+         self.collisionimage = self.canvas.create_rectangle(self.x+x1,self.y+y1,self.x+x2,self.y+y2,fill="", outline = "white") 
+      
+
+class LEDscoreobj:
+    def __init__(self, canvas,x=0,y=0, score = 0, colour = "white", pixelsize = 2, charwidth=23, numzeros = 0, solid = False, bg = True):
+         self.x = x
+         self.y = y
+         self.score = score
+         self.canvas = canvas
+         self.LEDPoints = []
+         self.colour = colour
+         self.pixelsize = pixelsize
+         self.charwidth = charwidth
+         self.numzeros = numzeros 
+         self.solid = solid
+         self.bg = bg
+         self.draw()
+    def draw(self):
+        global psize, charwidth
+        self.undraw()
+        charwidth = self.charwidth
+        psize = self.pixelsize
+        ShowColourScore2(self.canvas,self.x,self.y,self.colour,self.score,self.LEDPoints, self.numzeros, self.solid, self.bg) 
+    def undraw(self):
+         for p in self.LEDPoints:
+            self.canvas.delete(p)
+         self.LEDPoints.clear()
+    def update(self,myscore):
+        self.score = myscore
+        self.draw()
+
