@@ -1,4 +1,5 @@
 import math
+import pygame
 
 
 # TODO
@@ -90,8 +91,16 @@ def createCharBlockColour2(canvas,x,y,colour, points, LEDpoints,solid=False, bg=
        createLEDcolourSolid(canvas,x+p[0]*psize,y+p[1]*psize, colour, LEDpoints)
     else:
        createLEDcolour(canvas,x+p[0]*psize,y+p[1]*psize, colour, LEDpoints) 
-       
 
+def pygamecreateCharBlockColour2(screen,x,y,colour, points,solid=False):
+    for p in points:
+      if solid == True:
+       srect = pygame.Rect(x+p[0]*psize,y+p[1]*psize, psize, psize)
+       pygame.draw.rect(screen, colour, srect)
+      else:
+       pygame.draw.circle(screen,colour,(x+p[0]*psize+psize/2,y+p[1]*psize+psize/2),psize/2)
+
+  
 # Multi-Colour char
 def createCharColour(canvas,x,y,colourpoints, LEDpoints):
   for p in colourpoints:
@@ -142,6 +151,12 @@ def ShowColourScore2(canvas,x,y,colour, myscore, LEDpoints,numzeros=9,solid=Fals
     for i,c in enumerate(stringscore):
        createCharBlockColour2(canvas,x+i*charwidth,y,colour,digits[int(c)], LEDpoints, solid = solid, bg = bg)
 
+def pygameShowColourScore2(canvas,x,y,colour, myscore,numzeros=9,solid=False):
+    digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
+    stringscore = str(myscore).zfill(numzeros) 
+    for i,c in enumerate(stringscore):
+       pygamecreateCharBlockColour2(canvas,x+i*charwidth,y,colour,digits[int(c)], solid = solid)
+
 def ShowColourText(canvas,x,y,colour, mytext, LEDpoints):
     charactermap = [charA,charB,charC,charD,charE,charF,charG,charH,charI,charJ,charK,charL,charM,charN,charO,charP,charQ,charR,charS,charT,charU,charV,charW,charX,charY,charZ] 
     for i,c in enumerate(mytext):  # i=0 pairs with c = first char in mytext, i = 1 pairs with c = second char, etc
@@ -172,7 +187,34 @@ def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = Tr
             createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour, charactermap[ord(c)-65], LEDpoints, solid = solid, bg = bg)  
        if c in ["I"]:
            AdjustPos =  AdjustPos - charwidth/8    
-          
+
+def pygameShowColourText2(canvas,x,y,colour, mytext, solid = False):
+    digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
+    mytext = mytext.upper()
+    AdjustPos = 0
+    charactermap = [charA,charB,charC,charD,charE,charF,charG,charH,charI,charJ,charK,charL,charM,charN,charO,charP,charQ,charR,charS,charT,charU,charV,charW,charX,charY,charZ] 
+    for i,c in enumerate(mytext):  # i=0 pairs with c = first char in mytext, i = 1 pairs with c = second char, etc
+       if c in ["M","W","V"]:
+           AdjustPos =  AdjustPos + charwidth/8
+       if c in ["I"]:
+           AdjustPos =  AdjustPos - charwidth/8
+       if c != ' ':
+          if c in "0123456789":
+            pygamecreateCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,digits[int(c)], solid = solid)
+          elif c == "%":
+            pygamecreateCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charPercent, solid = solid)
+          elif c == ".":
+            AdjustPos = AdjustPos-2*charwidth/8
+            pygamecreateCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charDot, solid = solid)
+          elif c == ":":
+            AdjustPos = AdjustPos-2*charwidth/8
+            pygamecreateCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charColon, solid = solid)
+          elif ord(c)-65 >= 0 and ord(c)-65 < len(charactermap):
+            pygamecreateCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour, charactermap[ord(c)-65], solid = solid)  
+       if c in ["I"]:
+           AdjustPos =  AdjustPos - charwidth/8    
+
+
 def Erasepoints(canvas,LEDpoints):
     for p in LEDpoints:
       canvas.delete(p)
@@ -205,6 +247,46 @@ class LEDtextobj:
         self.text = mytext
         self.draw()
 
+class pygameLEDtextobj:
+    def __init__(self, screen,x=0,y=0, text = "", colour = "white", pixelsize = 2, charwidth=23, solid = False):
+         self.x = x
+         self.y = y
+         self.text = text
+         self.screen = screen
+         self.colour = colour
+         self.pixelsize = pixelsize
+         self.charwidth = charwidth
+         self.solid = solid
+         self.draw()
+    def draw(self):
+        global charwidth, psize
+        charwidth = self.charwidth
+        psize = self.pixelsize
+        pygameShowColourText2(self.screen,self.x,self.y,self.colour,self.text, self.solid) 
+    def update(self,mytext):
+        self.text = mytext
+        self.draw()
+
+class pygameLEDscoreobj:
+    def __init__(self, screen,x=0,y=0, score = 0, colour = "white", pixelsize = 2, charwidth=23, numzeros = 0, solid = False):
+         self.x = x
+         self.y = y
+         self.score = score
+         self.screen = screen
+         self.colour = colour
+         self.pixelsize = pixelsize
+         self.charwidth = charwidth
+         self.numzeros = numzeros 
+         self.solid = solid
+         self.draw()
+    def draw(self):
+        global psize, charwidth
+        charwidth = self.charwidth
+        psize = self.pixelsize
+        pygameShowColourScore2(self.screen,self.x,self.y,self.colour,self.score, self.numzeros, self.solid) 
+    def update(self,myscore):
+        self.score = myscore
+        self.draw()
 
 def rotatepoints(points,angle,center):
          newpoints = []
