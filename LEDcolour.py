@@ -19,6 +19,8 @@ colourBlack = "#000000"
 colourBlue  = "#0000FF"
 colourBlueLight = "#B5B3F5"
 colourGrey  = "#AAAAAA"
+colourDarkGrey  = "#777777"
+colourLightGrey  = "#DDDDDD"
 colourPink  = "#F498EC"
 colourGreen = "#279627"
 colourGreenLight = "#90EE90"
@@ -105,8 +107,22 @@ def chooseGrey():
    global selectedColour
    selectedColour = colourGrey
 
+def chooseLightGrey():
+   global selectedColour
+   selectedColour = colourLightGrey  
+
+def chooseDarkGrey():
+   global selectedColour
+   selectedColour = colourDarkGrey  
+
 btnGrey = Button(mainwin,text="GREY", bg="black", fg="white", command = chooseGrey)
-btnGrey.place(x=100,y=250)
+btnGrey.place(x=70,y=250)
+
+btnLightGrey = Button(mainwin,text="LIGHT", bg="black", fg="white", command = chooseLightGrey)
+btnLightGrey.place(x=10,y=250)
+
+btnDarkGrey = Button(mainwin,text="DARK", bg="black", fg="white", command = chooseDarkGrey)
+btnDarkGrey.place(x=120,y=250)
 
 def choosePink():
    global selectedColour

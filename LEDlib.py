@@ -1,6 +1,4 @@
 import math
-import pygame
-
 
 # TODO
 # Make load/save easier
