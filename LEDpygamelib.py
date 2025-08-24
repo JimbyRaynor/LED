@@ -152,6 +152,9 @@ class pygameLEDobj:
         self.draw()
     def draw(self):
         pygameCreateCharColourSolid(self.screen,self.x,self.y,self.CharPoints,self.pixelsize)
+        if self.collisionrectshow:
+            x1,y1,x2,y2 = self.collisionrect 
+            pygame.draw.rect(self.screen, "white",(self.x+x1,self.y+y1,x2-x1,y2-y1),width=2)
     def move(self): 
          self.x = self.x + self.dx
          self.y = self.y + self.dy
@@ -162,3 +165,52 @@ class pygameLEDobj:
          self.RotatedCollisionPoints = rotatepoints(self.CollisionPoints,angle=angledeg,center=(centerx,centery))
          self.draw()
 
+class pygameSplitCharobj: # this object splits a char into two, lasting timealive milliseconds
+    def __init__(self,screen,myChar,pixelsize,offset,x=0,y=0,dx=0,dy=0,stepsalive=1000):
+        self.CharPoints = self.split(myChar,offset)
+        self.x = x
+        self.y = y
+        self.dx = dx
+        self.dy = dy
+        self.pixelsize = pixelsize
+        self.screen = screen
+        self.stepcounter = 0
+        self.stepsalive = stepsalive
+    def split(self,myChar,offset):
+        newChar = []
+        for x,y,z in myChar:
+            if y % 2 == offset:
+                newChar.append((x,y*4,z))
+        return newChar
+    def draw(self):
+        pygameCreateCharColourSolid(self.screen,self.x,self.y,self.CharPoints,self.pixelsize)
+    def move(self):
+        self.stepcounter += 1
+        self.x = self.x + self.dx
+        self.y = self.y + self.dy
+        self.draw()
+
+class pygameSparkScoreObj: # for displaying temporary score displays (when awarding points)
+    def __init__(self,screen,x=0,y=0,score = 0, colour = "white",pixelsize =2, charwidth = 24, numzeros = 4,solid=False,dx=0,dy=0,stepsalive=100):
+        self.x = x
+        self.y = y
+        self.dx = dx
+        self.dy = dy
+        self.colour = colour
+        self.score = score
+        self.numzeros = numzeros       
+        self.pixelsize = pixelsize
+        self.screen = screen
+        self.charwidth = charwidth
+        self.solid = solid
+        self.stepcounter = 0
+        self.stepsalive = stepsalive
+    def draw(self):
+        global psize, charwidth
+        psize = self.pixelsize
+        charwidth = self.charwidth
+        pygameShowColourScore2(self.screen,self.x,self.y,self.colour,self.score, self.numzeros, self.solid) 
+    def move(self):
+           self.x = self.x + self.dx
+           self.y = self.y + self.dy
+           self.draw()
