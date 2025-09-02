@@ -7,7 +7,7 @@ psize = 3
 charwidth = 23
 
 ONE = [(1,6), (2,1), (2,6), (3,0), (3,1), (3,2), (3,3), (3,4), (3,5), (3,6), (4,0), (4,1), (4,2), (4,3), (4,4), (4,5), (4,6), (5,6), (6,6)]
-ZERO = [(0,2), (0,3), (0,4), (0,5), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,3), (2,6), (3,0), (3,3), (3,6), (4,0), (4,2), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,1), (6,2), (6,3), (6,4), (6,5)]
+ZERO = [(0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,3), (2,6), (3,0), (3,3), (3,6), (4,0), (4,2), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,1), (6,2), (6,3), (6,4), (6,5)]
 TWO = [(0,1), (1,0), (1,1), (1,2), (1,6), (2,0), (2,2), (2,5), (2,6), (3,0), (3,4), (3,5), (3,6), (4,0), (4,4), (4,6), (5,0), (5,1), (5,2), (5,3), (5,6), (6,1), (6,2), (6,3), (6,5), (6,6)]
 THREE = [(0,1), (0,5), (1,0), (1,1), (1,5), (1,6), (2,0), (2,3), (2,6), (3,0), (3,3), (3,6), (4,0), (4,3), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,1), (6,2), (6,4), (6,5)]
 FOUR = [(0,3), (0,4), (1,2), (1,3), (1,4), (2,1), (2,2), (2,4), (3,0), (3,1), (3,4), (4,0), (4,1), (4,2), (4,3), (4,4), (4,5), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,4)]
@@ -16,6 +16,11 @@ SIX = [(0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,1), (1,2), (1,3), (1,4), (1,
 SEVEN = [(0,0), (0,1), (1,0), (1,1), (2,0), (2,5), (2,6), (3,0), (3,3), (3,4), (3,5), (3,6), (4,0), (4,1), (4,2), (4,3), (4,4), (5,0), (5,1), (5,2), (6,0), (6,1)]
 EIGHT = [(0,1), (0,2), (0,4), (0,5), (1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,3), (2,6), (3,0), (3,3), (3,6), (4,0), (4,3), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,1), (6,2), (6,4), (6,5)]
 NINE = [(0,1), (0,2), (0,5), (1,0), (1,1), (1,2), (1,3), (1,5), (1,6), (2,0), (2,3), (2,6), (3,0), (3,3), (3,6), (4,0), (4,3), (4,5), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (6,1), (6,2), (6,3), (6,4)]
+
+PLUS = [(1,3), (2,3), (3,1), (3,2), (3,3), (3,4), (3,5), (4,3), (5,3)]
+TIMES = [(1,1), (1,5), (2,2), (2,4), (3,3), (4,2), (4,4), (5,1), (5,5)]
+LEFTBRACKET = [(2,2), (2,3), (2,4), (3,1), (3,5), (4,0), (4,6)]
+RIGHTBRACKET = [(2,0), (2,6), (3,1), (3,5), (4,2), (4,3), (4,4)]
 
 # leave rightmost column blank
 # leave bottom row blank  
@@ -168,7 +173,7 @@ def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = Tr
     for i,c in enumerate(mytext):  # i=0 pairs with c = first char in mytext, i = 1 pairs with c = second char, etc
        if c in ["M","W","V"]:
            AdjustPos =  AdjustPos + charwidth/8
-       if c in ["I"]:
+       if c in "I()":
            AdjustPos =  AdjustPos - charwidth/8
        if c != ' ':
           if c in "0123456789":
@@ -181,10 +186,18 @@ def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = Tr
           elif c == ":":
             AdjustPos = AdjustPos-2*charwidth/8
             createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charColon, LEDpoints, solid = solid, bg = bg)
+          elif c == "+":
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,PLUS, LEDpoints, solid = solid, bg = bg)
+          elif c == "*":
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,TIMES, LEDpoints, solid = solid, bg = bg)
+          elif c == "(":
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,LEFTBRACKET, LEDpoints, solid = solid, bg = bg)
+          elif c == ")":
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,RIGHTBRACKET, LEDpoints, solid = solid, bg = bg)
           elif ord(c)-65 >= 0 and ord(c)-65 < len(charactermap):
             createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour, charactermap[ord(c)-65], LEDpoints, solid = solid, bg = bg)  
-       if c in ["I"]:
-           AdjustPos =  AdjustPos - charwidth/8    
+       if c in "I()":
+           AdjustPos =  AdjustPos - charwidth/8  
 
 def pygameShowColourText2(canvas,x,y,colour, mytext, solid = False):
     digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
