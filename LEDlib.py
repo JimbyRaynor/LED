@@ -21,6 +21,7 @@ PLUS = [(1,3), (2,3), (3,1), (3,2), (3,3), (3,4), (3,5), (4,3), (5,3)]
 TIMES = [(1,1), (1,5), (2,2), (2,4), (3,3), (4,2), (4,4), (5,1), (5,5)]
 LEFTBRACKET = [(2,2), (2,3), (2,4), (3,1), (3,5), (4,0), (4,6)]
 RIGHTBRACKET = [(2,0), (2,6), (3,1), (3,5), (4,2), (4,3), (4,4)]
+EQUALS = [(1,2), (1,4), (2,2), (2,4), (3,2), (3,4), (4,2), (4,4), (5,2), (5,4), (6,2), (6,4)]
 
 # leave rightmost column blank
 # leave bottom row blank  
@@ -165,10 +166,11 @@ def ShowColourText(canvas,x,y,colour, mytext, LEDpoints):
     for i,c in enumerate(mytext):  # i=0 pairs with c = first char in mytext, i = 1 pairs with c = second char, etc
        createCharBlockColour(canvas,x+i*charwidth,y,colour, charactermap[ord(c)-65], LEDpoints)  
 
-def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = True):
+def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = True, multicolour = False, plusorder = ["green","green"]):
     digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
     mytext = mytext.upper()
     AdjustPos = 0
+    PlusCount = 0
     charactermap = [charA,charB,charC,charD,charE,charF,charG,charH,charI,charJ,charK,charL,charM,charN,charO,charP,charQ,charR,charS,charT,charU,charV,charW,charX,charY,charZ] 
     for i,c in enumerate(mytext):  # i=0 pairs with c = first char in mytext, i = 1 pairs with c = second char, etc
        if c in ["M","W","V"]:
@@ -187,13 +189,20 @@ def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = Tr
             AdjustPos = AdjustPos-2*charwidth/8
             createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charColon, LEDpoints, solid = solid, bg = bg)
           elif c == "+":
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,PLUS, LEDpoints, solid = solid, bg = bg)
+            newcolour = colour
+            if multicolour:
+               if PlusCount < len(plusorder):
+                  newcolour = plusorder[PlusCount]
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,newcolour,PLUS, LEDpoints, solid = solid, bg = bg)
+            PlusCount = PlusCount + 1
           elif c == "*":
             createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,TIMES, LEDpoints, solid = solid, bg = bg)
           elif c == "(":
             createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,LEFTBRACKET, LEDpoints, solid = solid, bg = bg)
           elif c == ")":
             createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,RIGHTBRACKET, LEDpoints, solid = solid, bg = bg)
+          elif c== "=":
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,EQUALS, LEDpoints, solid = solid, bg = bg) 
           elif ord(c)-65 >= 0 and ord(c)-65 < len(charactermap):
             createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour, charactermap[ord(c)-65], LEDpoints, solid = solid, bg = bg)  
        if c in "I()":
@@ -232,7 +241,7 @@ def Erasepoints(canvas,LEDpoints):
 
 
 class LEDtextobj:
-    def __init__(self, canvas,x=0,y=0, text = "", colour = "white", pixelsize = 2, charwidth=23, solid = False, bg = False):
+    def __init__(self, canvas,x=0,y=0, text = "", colour = "white", pixelsize = 2, charwidth=23, solid = False, bg = False, multicolour = False, plusorder = ["green","green"]):
          self.x = x
          self.y = y
          self.text = text
@@ -243,13 +252,15 @@ class LEDtextobj:
          self.charwidth = charwidth
          self.solid = solid
          self.bg = bg
+         self.multicolour = multicolour
+         self.plusorder = plusorder
          self.draw()
     def draw(self):
         global charwidth, psize
         self.undraw()
         charwidth = self.charwidth
         psize = self.pixelsize
-        ShowColourText2(self.canvas,self.x,self.y,self.colour,self.text,self.LEDPoints, self.solid, self.bg) 
+        ShowColourText2(self.canvas,self.x,self.y,self.colour,self.text,self.LEDPoints, self.solid, self.bg, self.multicolour, self.plusorder) 
     def undraw(self):
          for p in self.LEDPoints:
             self.canvas.delete(p)
