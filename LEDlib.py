@@ -54,6 +54,7 @@ charZ = [(1,0), (1,1), (1,5), (1,6), (2,0), (2,4), (2,5), (2,6), (3,0), (3,3), (
 charPercent = [(1,0), (1,1), (1,5), (2,0), (2,1), (2,4), (3,3), (4,2), (4,5), (4,6), (5,1), (5,5), (5,6)]
 charDot = [(3,5), (3,6), (4,5), (4,6)]
 charColon = [(3,1), (3,2), (3,5), (3,6), (4,1), (4,2), (4,5), (4,6)]
+charQuestionMark = [(1,1), (2,0), (3,0), (3,4), (3,6), (4,0), (4,3), (5,1), (5,2)]
 
 def createLED(canvas, x,y, LEDpoints):
  p1 = canvas.create_rectangle(x, y, x+psize, y+psize, fill="black")
@@ -197,6 +198,8 @@ def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = Tr
             PlusCount = PlusCount + 1
           elif c == "*":
             createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,TIMES, LEDpoints, solid = solid, bg = bg)
+          elif c == "?":
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charQuestionMark, LEDpoints, solid = solid, bg = bg)
           elif c == "(":
             createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,LEFTBRACKET, LEDpoints, solid = solid, bg = bg)
           elif c == ")":
