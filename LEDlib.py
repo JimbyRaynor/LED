@@ -41,7 +41,7 @@ charM = [(0,0), (0,1), (0,2), (0,3), (0,4), (0,5), (0,6), (1,0), (1,1), (1,2), (
 charN = [(1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,2), (3,3), (4,3), (4,4), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,0), (6,1), (6,2), (6,3), (6,4), (6,5), (6,6)]
 charO = [(1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,0), (3,6), (4,0), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,0), (6,1), (6,2), (6,3), (6,4), (6,5), (6,6)]
 charP = [(1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,0), (3,3), (4,0), (4,3), (5,0), (5,1), (5,2), (5,3), (6,0), (6,1), (6,2), (6,3)]
-charQ = []
+charQ = [(1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,0), (3,6), (4,0), (4,5), (4,6), (5,0), (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (6,0), (6,1), (6,2), (6,3), (6,4), (6,5), (6,6), (6,7), (7,7)]
 charR = [(1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (3,0), (3,3), (3,4), (4,0), (4,3), (4,4), (4,5), (5,0), (5,1), (5,2), (5,3), (5,5), (5,6), (6,1), (6,2), (6,6)]
 charS = [(1,0), (1,1), (1,2), (1,3), (1,5), (1,6), (2,0), (2,1), (2,2), (2,3), (2,5), (2,6), (3,0), (3,3), (3,6), (4,0), (4,3), (4,6), (5,0), (5,1), (5,3), (5,4), (5,5), (5,6), (6,0), (6,1), (6,3), (6,4), (6,5), (6,6)]
 charT = [(1,0), (2,0), (3,0), (3,1), (3,2), (3,3), (3,4), (3,5), (3,6), (4,0), (4,1), (4,2), (4,3), (4,4), (4,5), (4,6), (5,0), (6,0)]
@@ -62,9 +62,12 @@ def createLED(canvas, x,y, LEDpoints):
  LEDpoints.append(p1)
  LEDpoints.append(p2)
 
-def createLEDcolour(canvas, x,y, colour, LEDpoints):
+def createLEDcolour(canvas, x,y, colour, LEDpoints, square=False):
  p1 = canvas.create_rectangle(x, y, x+psize, y+psize, fill="black")
- p2 = canvas.create_oval(x, y, x+psize, y+psize, fill=colour)
+ if square == False:
+    p2 = canvas.create_oval(x, y, x+psize, y+psize, fill=colour)
+ else:
+    p2 = canvas.create_rectangle(x, y, x+psize-1, y+psize-1, fill=colour)
  #p2 = canvas.create_rectangle(x, y, x+psize-1, y+psize-1, fill=colour)
  LEDpoints.append(p1)
  LEDpoints.append(p2)
@@ -87,7 +90,7 @@ def createCharBlockColour(canvas,x,y,colour, points, LEDpoints):
   for p in points:
     createLEDcolour(canvas,x+p[0]*psize,y+p[1]*psize, colour, LEDpoints) 
 
-def createCharBlockColour2(canvas,x,y,colour, points, LEDpoints,solid=False, bg= True):
+def createCharBlockColour2(canvas,x,y,colour, points, LEDpoints,solid=False, bg= True, square=False):
   if bg == True:
     prect = canvas.create_rectangle(x, y, x+psize*8, y+psize*8, fill="black") # erase background for new char
     LEDpoints.append(prect)
@@ -95,7 +98,7 @@ def createCharBlockColour2(canvas,x,y,colour, points, LEDpoints,solid=False, bg=
     if solid == True:
        createLEDcolourSolid(canvas,x+p[0]*psize,y+p[1]*psize, colour, LEDpoints)
     else:
-       createLEDcolour(canvas,x+p[0]*psize,y+p[1]*psize, colour, LEDpoints) 
+       createLEDcolour(canvas,x+p[0]*psize,y+p[1]*psize, colour, LEDpoints, square=square) 
 
 def pygamecreateCharBlockColour2(screen,x,y,colour, points,solid=False):
     for p in points:
@@ -167,7 +170,7 @@ def ShowColourText(canvas,x,y,colour, mytext, LEDpoints):
     for i,c in enumerate(mytext):  # i=0 pairs with c = first char in mytext, i = 1 pairs with c = second char, etc
        createCharBlockColour(canvas,x+i*charwidth,y,colour, charactermap[ord(c)-65], LEDpoints)  
 
-def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = True, multicolour = False, plusorder = ["green","green"]):
+def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = True, multicolour = False, plusorder = ["green","green"], square=False):
     digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
     mytext = mytext.upper()
     AdjustPos = 0
@@ -180,34 +183,34 @@ def ShowColourText2(canvas,x,y,colour, mytext, LEDpoints, solid = False, bg = Tr
            AdjustPos =  AdjustPos - charwidth/8
        if c != ' ':
           if c in "0123456789":
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,digits[int(c)], LEDpoints, solid = solid, bg = bg)
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,digits[int(c)], LEDpoints, solid = solid, bg = bg, square=square)
           elif c == "%":
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charPercent, LEDpoints, solid = solid, bg = bg)
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charPercent, LEDpoints, solid = solid, bg = bg, square=square)
           elif c == ".":
             AdjustPos = AdjustPos-2*charwidth/8
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charDot, LEDpoints, solid = solid, bg = bg)
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charDot, LEDpoints, solid = solid, bg = bg, square=square)
           elif c == ":":
             AdjustPos = AdjustPos-2*charwidth/8
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charColon, LEDpoints, solid = solid, bg = bg)
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charColon, LEDpoints, solid = solid, bg = bg, square=square)
           elif c == "+":
             newcolour = colour
             if multicolour:
                if PlusCount < len(plusorder):
                   newcolour = plusorder[PlusCount]
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,newcolour,PLUS, LEDpoints, solid = solid, bg = bg)
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,newcolour,PLUS, LEDpoints, solid = solid, bg = bg, square=square)
             PlusCount = PlusCount + 1
           elif c == "*":
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,TIMES, LEDpoints, solid = solid, bg = bg)
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,TIMES, LEDpoints, solid = solid, bg = bg, square=square)
           elif c == "?":
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charQuestionMark, LEDpoints, solid = solid, bg = bg)
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,charQuestionMark, LEDpoints, solid = solid, bg = bg, square=square)
           elif c == "(":
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,LEFTBRACKET, LEDpoints, solid = solid, bg = bg)
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,LEFTBRACKET, LEDpoints, solid = solid, bg = bg, square=square)
           elif c == ")":
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,RIGHTBRACKET, LEDpoints, solid = solid, bg = bg)
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,RIGHTBRACKET, LEDpoints, solid = solid, bg = bg, square=square)
           elif c== "=":
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,EQUALS, LEDpoints, solid = solid, bg = bg) 
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour,EQUALS, LEDpoints, solid = solid, bg = bg, square=square) 
           elif ord(c)-65 >= 0 and ord(c)-65 < len(charactermap):
-            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour, charactermap[ord(c)-65], LEDpoints, solid = solid, bg = bg)  
+            createCharBlockColour2(canvas,x+i*charwidth+AdjustPos,y,colour, charactermap[ord(c)-65], LEDpoints, solid = solid, bg = bg, square=square)  
        if c in "I()":
            AdjustPos =  AdjustPos - charwidth/8  
 
@@ -244,7 +247,7 @@ def Erasepoints(canvas,LEDpoints):
 
 
 class LEDtextobj:
-    def __init__(self, canvas,x=0,y=0, text = "", colour = "white", pixelsize = 2, charwidth=23, solid = False, bg = False, multicolour = False, plusorder = ["green","green"]):
+    def __init__(self, canvas,x=0,y=0, text = "", colour = "white", pixelsize = 2, charwidth=23, solid = False, bg = False, multicolour = False, plusorder = ["green","green"],square=False):
          self.x = x
          self.y = y
          self.text = text
@@ -257,13 +260,16 @@ class LEDtextobj:
          self.bg = bg
          self.multicolour = multicolour
          self.plusorder = plusorder
+         self.square = square
          self.draw()
+    def __del__(self): # the destructor 
+        self.undraw()
     def draw(self):
         global charwidth, psize
         self.undraw()
         charwidth = self.charwidth
         psize = self.pixelsize
-        ShowColourText2(self.canvas,self.x,self.y,self.colour,self.text,self.LEDPoints, self.solid, self.bg, self.multicolour, self.plusorder) 
+        ShowColourText2(self.canvas,self.x,self.y,self.colour,self.text,self.LEDPoints, self.solid, self.bg, self.multicolour, self.plusorder, self.square) 
     def undraw(self):
          for p in self.LEDPoints:
             self.canvas.delete(p)
@@ -271,6 +277,67 @@ class LEDtextobj:
     def update(self,mytext):
         self.text = mytext
         self.draw()
+
+
+class scrollboxobj:
+    def __init__(self, canvas,x=0,y=0,width=1000,height=700):
+        self.x = x
+        self.y = y
+        self.maxlines = 20
+        self.width = width
+        self.height = height
+        self.canvas = canvas
+        self.walls = 0
+        self.scrollboxtext = [] # list of lines of text to display
+        self.scrollboxLEDlines = [] # list of canvas objects that draw each line of text
+        self.scrollboxstart = 0 # draw lines starting at line scrollboxstart (simulates scrolling)
+        for i in range(self.maxlines):
+            self.scrollboxLEDlines.append(self.mediumtext(self.x+5,self.y+5+i*26," "))
+        self.draw()
+    def __del__(self):  # this will call the destructor of all objects inside this class, e.g. scrollboxLEDlines and all its contents
+        self.undraw()
+    def mediumtext(self,x,y,mytext):
+        return LEDtextobj(self.canvas,x=x,y=y,text=mytext,colour="light green",pixelsize = 3, charwidth=8*3 , solid = False, square=False)
+    def scrollboxset(self,i,mytext):
+        self.scrollboxLEDlines[i].update(mytext)
+    def scrollboxadd(self,mytext):
+        if len(self.scrollboxtext) >= self.maxlines: self.scrollboxstart = self.scrollboxstart + 1
+        self.scrollboxtext.append(mytext)
+        i = 0
+        while i <= self.maxlines and i <= len(self.scrollboxtext)-1-self.scrollboxstart:
+          self.scrollboxset(i,self.scrollboxtext[self.scrollboxstart+i])
+          i = i + 1
+    def draw(self):
+        self.walls = self.canvas.create_rectangle(self.x,self.y,self.x+self.width,self.y+self.height,outline="light green")
+    def undraw(self):
+        self.canvas.delete(self.walls)
+
+class scrollboxsmallobj:
+    def __init__(self, canvas,x=0,y=0,width=1000,height=700):
+        self.x = x
+        self.y = y
+        self.maxlines = 30
+        self.width = width
+        self.height = height
+        self.canvas = canvas
+        self.walls = 0
+        self.scrollboxtext = [] # list of lines of text to display
+        self.scrollboxLEDlines = [] # list of canvas objects that draw each line of text
+        self.scrollboxstart = 0 # draw lines starting at line scrollboxstart (simulates scrolling)
+        for i in range(self.maxlines):
+            self.scrollboxLEDlines.append(self.smalltext(self.x+5,self.y+5+i*20," "))
+    def smalltext(self,x,y,mytext):
+        return LEDtextobj(self.canvas,x=x,y=y,text=mytext,colour="light green",pixelsize = 2, charwidth=8*2-2, solid = False, square=False)
+    def scrollboxset(self,i,mytext):
+        self.scrollboxLEDlines[i].update(mytext)
+    def scrollboxadd(self,mytext):
+        if len(self.scrollboxtext) >= self.maxlines: self.scrollboxstart = self.scrollboxstart + 1
+        self.scrollboxtext.append(mytext)
+        i = 0
+        while i <= self.maxlines and i <= len(self.scrollboxtext)-1-self.scrollboxstart:
+          self.scrollboxset(i,self.scrollboxtext[self.scrollboxstart+i])
+          i = i + 1
+
 
 class pygameLEDtextobj:
     def __init__(self, screen,x=0,y=0, text = "", colour = "white", pixelsize = 2, charwidth=23, solid = False):
