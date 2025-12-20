@@ -6,21 +6,22 @@
 
 //compile: g++ LEDcolour.cpp -o LEDcolour -lraylib -lm -ldl -lpthread -lGL -lX11
 
-//To run ./LEDcolour
+//run:     ./LEDcolour
 
 // raylib uses float for most numbers, and so use 2.0f to convert int to float. Note that 2.0 will be a double
 
-// put yellow border around black pixels (non zero)
+
+// Output grid as text (python list, maybe option for C++ list) to console first
 // Draw eraser with this program!!! store as charEraser
-// Still need white/black/zero (eraser)
+
 
 using namespace std;
 
 int screenWidth = 1200; 
 int screenHeight = 800;
 
-const int Gridcells = 8;
-int Grid[Gridcells][Gridcells];
+int Grid[1000][1000];
+int Gridcells = 32;
 int cellwidth = (screenHeight-10)/Gridcells;
 int startx=6, starty=6;
 int count = 0;
@@ -84,6 +85,11 @@ Color AllColours[60] = {rblightblue, rbblue, rbdarkblue, rblightred, rbred, rbda
                        rblightgrey, rbgrey, rbdarkgrey, rblightbrown, rbbrown, rbdarkbrown, rblightaqua, rbaqua, rbdarkaqua,
                        rblightpurple, rbpurple, rbdarkpurple, rbblack, rberaser, rbwhite};
 
+string AllColourwords[60] = {"light blue", "blue", "dark blue", "light red", "red", "dark red", "light orange", "orange", 
+                       "dark orange","light green", "green", "dark green", "light pink", "pink", "dark pink", "light yellow", 
+                       "yellow", "dark yellow", "light grey", "grey", "dark grey", "light brown", "brown", "dark brown", 
+                       "light aqua", "aqua", "dark aqua", "light purple", "purple", "dark purple", "black", "eraser", "white"};                       
+
 int selectedcolourindex = 1;
 
 Color getColour(int myindex)
@@ -136,15 +142,26 @@ void DrawPalette()
           DrawRectangleLines(palettex+j*40,palettey+i*40,40,40,YELLOW);
         }
       }
-
 }
+
+void drawCharfromGrid(int previewx, int previewy, int psize)
+     {
+       Color Mycolour;
+       for (int i=0;i < Gridcells; i++ )
+         for (int j=0; j < Gridcells; j++)
+          if (Grid[j][i] != 0)
+            {
+              Mycolour = getColour(Grid[j][i]);
+              DrawRectangle(previewx+i*psize,previewy+j*psize,psize,psize,Mycolour);
+            }        
+     }
 
 int main() {
     mystring = "Hello there string";
     InitWindow(screenWidth, screenHeight, "LEDColour");
     int cellx, celly;
     Vector2 MousePos;
-    SetTargetFPS(60);
+    SetTargetFPS(30);
 
     while (!WindowShouldClose()) 
     {
@@ -187,6 +204,13 @@ int main() {
          DrawText(mystring.c_str(), screenWidth-120, screenHeight-20, 20, BLUE);
          mystring = "palette=(" +to_string(palcellx)+", "+to_string(palcelly)+")";
          DrawText(mystring.c_str(), screenWidth-180, screenHeight-60, 20, BLUE);
+         mystring = "Selected:";
+         DrawText(mystring.c_str(), 1061, 474, 20, WHITE);
+         mystring = AllColourwords[selectedcolourindex-1];
+         DrawText(mystring.c_str(), 1061, 498, 20, WHITE);
+         drawCharfromGrid(790, 10, 1);
+         drawCharfromGrid(790+Gridcells*2, 10, 2);
+         drawCharfromGrid(790+Gridcells*2+Gridcells*3, 10, 3);
         EndDrawing();
     }
 
