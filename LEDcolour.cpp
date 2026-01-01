@@ -3,16 +3,23 @@
 #include <time.h>
 #include <math.h>
 #include <iostream>
+#include <fstream>
 
 //compile: g++ LEDcolour.cpp -o LEDcolour -lraylib -lm -ldl -lpthread -lGL -lX11
 
+
 //run:     ./LEDcolour
+
 
 // raylib uses float for most numbers, and so use 2.0f to convert int to float. Note that 2.0 will be a double
 
-
-// Output grid as text (python list, maybe option for C++ list) to console first
+// "space bar" - save
+// "1234" for size 8,16,24,32
+// "left right arrow " next/prev animation frame
+// "up down" next/prev picture
 // Draw eraser with this program!!! store as charEraser
+// output as python text AND c++ text (only need for this porgram)
+// For C++ output as (x,y, colourindex 0 to 59)
 
 
 using namespace std;
@@ -156,13 +163,60 @@ void drawCharfromGrid(int previewx, int previewy, int psize)
             }        
      }
 
+
+void ClearGrid()
+{
+  for (int j = 0; j< Gridcells; j++)
+      for (int i = 0; i< Gridcells; i++) 
+         Grid[j][i] = 0;
+}
+
+void Outputtofile(string filename)
+{
+  ofstream outobject(filename); // file writer object --- file closes automatically when out of scope
+  if (!outobject)
+  {
+    cout << "Error: Could not output to file " << filename << "\n";
+    return;
+  }
+  for (int j = 0; j< Gridcells; j++)
+      for (int i = 0; i< Gridcells; i++)
+      { 
+         if (Grid[j][i] != 0)
+         {
+          outobject << i << " " << j << " " << Grid[j][i] << "\n";
+         }
+      }
+}
+
+void Readfromfile(string filename)
+{
+  int cellx,celly, value;
+  ifstream inobject(filename); // file reader object --- file closes automatically when out of scope
+  if (!inobject)
+  {
+    cout << "Error: Could not read file " << filename << "\n";
+    return;
+  }
+
+while (inobject >> cellx >> celly >> value)
+ {
+  if ( (cellx >= 0) and (celly >= 0) and (cellx < Gridcells) and (celly < Gridcells) )
+    {
+      Grid[celly][cellx] = value;
+    }
+ }
+}
+
+     
 int main() {
     mystring = "Hello there string";
     InitWindow(screenWidth, screenHeight, "LEDColour");
     int cellx, celly;
     Vector2 MousePos;
-    SetTargetFPS(30);
-
+    SetTargetFPS(60);
+    ClearGrid();
+    Readfromfile("test1");
     while (!WindowShouldClose()) 
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -178,6 +232,7 @@ int main() {
               else
                 Grid[celly][cellx] = 0;  // erased, not black!
              count++;
+             Outputtofile("test1");
            }
           }
           else  // choose palette colour
