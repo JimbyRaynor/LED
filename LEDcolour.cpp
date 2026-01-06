@@ -11,9 +11,7 @@
 
 // raylib uses float for most numbers, and so use 2.0f to convert int to float. Note that 2.0 will be a double
 
-// "space bar" - save  AAAA  - first two letters for up down, last two for left right
-// "1234" for size 8,16,24,32
-// "left right arrow " next/prev animation frame
+
 // "up down" next/prev picture
 // Draw eraser with this program!!! store as charEraser
 // output as python text AND c++ text (only need for this program)
@@ -119,6 +117,24 @@ void IncHorFilename()
 
 }
 
+void IncVertFilename()
+{
+  string s;
+  s = focusfilename.substr(0,2);
+  if (s[1] < 'Z')
+  {
+    s[1]++;
+  }
+  else
+  {
+    s[1] = 'A';
+    if (s[0] < 'Z') {s[0]++;}
+  }
+  focusfilename[0] = s[0];
+  focusfilename[1] = s[1];
+
+}
+
 void DecHorFilename()
 {
   string s;
@@ -137,6 +153,27 @@ void DecHorFilename()
   }
   focusfilename[2] = s[0];
   focusfilename[3] = s[1];
+
+}
+
+void DecVertFilename()
+{
+  string s;
+  s = focusfilename.substr(0,2);
+  if (s[1] > 'A')
+  {
+    s[1]--;
+  }
+  else
+  {
+    if (s[0] > 'A') 
+    {
+      s[0]--;
+      s[1] = 'Z';
+    }
+  }
+  focusfilename[0] = s[0];
+  focusfilename[1] = s[1];
 
 }
 
@@ -257,24 +294,64 @@ int main() {
     Vector2 MousePos;
     SetTargetFPS(60);
     ClearGrid();
-    Readfromfile("data/"+focusfilename+".txt");
+    Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
     while (!WindowShouldClose()) 
     {
         if (IsKeyPressed(KEY_SPACE))
         {
-             Outputtofile("data/"+focusfilename+".txt");
+             Outputtofile("data/"+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsKeyPressed(KEY_RIGHT))
         {
              IncHorFilename();
              ClearGrid();
-             Readfromfile("data/"+focusfilename+".txt");
+             Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+        }
+        if (IsKeyPressed(KEY_UP))
+        {
+             IncVertFilename();
+             ClearGrid();
+             Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsKeyPressed(KEY_LEFT))
         {
              DecHorFilename();
              ClearGrid();
-             Readfromfile("data/"+focusfilename+".txt");
+             Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+        }
+        if (IsKeyPressed(KEY_DOWN))
+        {
+             DecVertFilename();
+             ClearGrid();
+             Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+        }
+        if (IsKeyPressed(KEY_ONE))
+        {
+          Gridcells = 8;
+          cellwidth = (screenHeight-10)/Gridcells;
+          ClearGrid();
+          Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+        }
+        if (IsKeyPressed(KEY_TWO))
+        {
+          Gridcells = 16;
+          cellwidth = (screenHeight-10)/Gridcells;
+          ClearGrid();
+          Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+        }
+        if (IsKeyPressed(KEY_THREE))
+        {
+          Gridcells = 24;
+          cellwidth = (screenHeight-10)/Gridcells;
+          ClearGrid();
+          Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+        }
+        if (IsKeyPressed(KEY_FOUR))
+        {
+          Gridcells = 32;
+          cellwidth = (screenHeight-10)/Gridcells;
+          ClearGrid();
+          Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
@@ -323,7 +400,10 @@ int main() {
          DrawText(mystring.c_str(), 800, 160, 20, WHITE);
          DrawText("<Space> - Save",800,200,20, WHITE);
          DrawText("<Right Arrow> - Next Frame",800,240,10, WHITE);
-         DrawText("<Left Arrow> - Previous Frame",800,280,10, WHITE);
+         DrawText("<Left Arrow> - Previous Frame",800,260,10, WHITE);
+         DrawText("<Up Arrow> - Next Picture",800,280,10, WHITE);
+         DrawText("<Down Arrow> - Previous Picture",800,300,10, WHITE);
+         DrawText("<1,2,3,4> - 8x8, 16x16, 24x24, 32x32",800,320,10, WHITE);
          drawCharfromGrid(790, 10, 1);
          drawCharfromGrid(790+Gridcells*2, 10, 2);
          drawCharfromGrid(790+Gridcells*2+Gridcells*3, 10, 3);
