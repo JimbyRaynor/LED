@@ -6,19 +6,17 @@
 #include <fstream>
 
 //compile: g++ LEDcolour.cpp -o LEDcolour -lraylib -lm -ldl -lpthread -lGL -lX11
-
-
 //run:     ./LEDcolour
 
 
 // raylib uses float for most numbers, and so use 2.0f to convert int to float. Note that 2.0 will be a double
 
-// "space bar" - save
+// "space bar" - save  AAAA  - first two letters for up down, last two for left right
 // "1234" for size 8,16,24,32
 // "left right arrow " next/prev animation frame
 // "up down" next/prev picture
 // Draw eraser with this program!!! store as charEraser
-// output as python text AND c++ text (only need for this porgram)
+// output as python text AND c++ text (only need for this program)
 // For C++ output as (x,y, colourindex 0 to 59)
 
 
@@ -37,8 +35,12 @@ int palettey = 20;
 int palcellx = 0;
 int palcelly = 0;
 
+string focusfilename = "AAAA";
+
 string mystring;
 // note that mystring.c_str() converts the C++ string mystring to the C array of characters
+
+
 
 Color HexToColour(int hexValue) {
     Color c;
@@ -98,6 +100,45 @@ string AllColourwords[60] = {"light blue", "blue", "dark blue", "light red", "re
                        "light aqua", "aqua", "dark aqua", "light purple", "purple", "dark purple", "black", "eraser", "white"};                       
 
 int selectedcolourindex = 1;
+
+void IncHorFilename()
+{
+  string s;
+  s = focusfilename.substr(2,2);
+  if (s[1] < 'Z')
+  {
+    s[1]++;
+  }
+  else
+  {
+    s[1] = 'A';
+    if (s[0] < 'Z') {s[0]++;}
+  }
+  focusfilename[2] = s[0];
+  focusfilename[3] = s[1];
+
+}
+
+void DecHorFilename()
+{
+  string s;
+  s = focusfilename.substr(2,2);
+  if (s[1] > 'A')
+  {
+    s[1]--;
+  }
+  else
+  {
+    if (s[0] > 'A') 
+    {
+      s[0]--;
+      s[1] = 'Z';
+    }
+  }
+  focusfilename[2] = s[0];
+  focusfilename[3] = s[1];
+
+}
 
 Color getColour(int myindex)
 {
@@ -195,7 +236,7 @@ void Readfromfile(string filename)
   ifstream inobject(filename); // file reader object --- file closes automatically when out of scope
   if (!inobject)
   {
-    cout << "Error: Could not read file " << filename << "\n";
+    //cout << "Error: Could not read file " << filename << "\n";
     return;
   }
 
@@ -216,9 +257,25 @@ int main() {
     Vector2 MousePos;
     SetTargetFPS(60);
     ClearGrid();
-    Readfromfile("test1");
+    Readfromfile("data/"+focusfilename+".txt");
     while (!WindowShouldClose()) 
     {
+        if (IsKeyPressed(KEY_SPACE))
+        {
+             Outputtofile("data/"+focusfilename+".txt");
+        }
+        if (IsKeyPressed(KEY_RIGHT))
+        {
+             IncHorFilename();
+             ClearGrid();
+             Readfromfile("data/"+focusfilename+".txt");
+        }
+        if (IsKeyPressed(KEY_LEFT))
+        {
+             DecHorFilename();
+             ClearGrid();
+             Readfromfile("data/"+focusfilename+".txt");
+        }
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
           if (MousePos.x < screenHeight) // draw on grid
@@ -232,7 +289,6 @@ int main() {
               else
                 Grid[celly][cellx] = 0;  // erased, not black!
              count++;
-             Outputtofile("test1");
            }
           }
           else  // choose palette colour
@@ -263,6 +319,11 @@ int main() {
          DrawText(mystring.c_str(), 1061, 474, 20, WHITE);
          mystring = AllColourwords[selectedcolourindex-1];
          DrawText(mystring.c_str(), 1061, 498, 20, WHITE);
+         mystring = "File: "+focusfilename+".txt";
+         DrawText(mystring.c_str(), 800, 160, 20, WHITE);
+         DrawText("<Space> - Save",800,200,20, WHITE);
+         DrawText("<Right Arrow> - Next Frame",800,240,10, WHITE);
+         DrawText("<Left Arrow> - Previous Frame",800,280,10, WHITE);
          drawCharfromGrid(790, 10, 1);
          drawCharfromGrid(790+Gridcells*2, 10, 2);
          drawCharfromGrid(790+Gridcells*2+Gridcells*3, 10, 3);
