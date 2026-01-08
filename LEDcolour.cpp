@@ -12,11 +12,8 @@
 // raylib uses float for most numbers, and so use 2.0f to convert int to float. Note that 2.0 will be a double
 
 
-// "up down" next/prev picture
 // Draw eraser with this program!!! store as charEraser
-// output as python text AND c++ text (only need for this program)
-// For C++ output as (x,y, colourindex 0 to 59)
-
+// output as python text
 
 using namespace std;
 
@@ -24,6 +21,7 @@ int screenWidth = 1200;
 int screenHeight = 800;
 
 int Grid[1000][1000];
+int Grid2[1000][1000];
 int Gridcells = 32;
 int cellwidth = (screenHeight-10)/Gridcells;
 int startx=6, starty=6;
@@ -249,6 +247,29 @@ void ClearGrid()
          Grid[j][i] = 0;
 }
 
+void ClearGrid2()
+{
+  for (int j = 0; j< Gridcells; j++)
+      for (int i = 0; i< Gridcells; i++) 
+         Grid2[j][i] = 0;
+}
+
+void CopyGrid()
+{
+  ClearGrid2();
+  for (int j = 0; j< Gridcells; j++)
+      for (int i = 0; i< Gridcells; i++) 
+         Grid2[j][i] = Grid[j][i];
+}
+
+void PasteGrid()
+{
+  for (int j = 0; j< Gridcells; j++)
+      for (int i = 0; i< Gridcells; i++) 
+         if (Grid2[j][i] != 0)
+            {Grid[j][i] = Grid2[j][i];}
+}
+
 void Outputtofile(string filename)
 {
   ofstream outobject(filename); // file writer object --- file closes automatically when out of scope
@@ -329,6 +350,7 @@ int main() {
         {
           Gridcells = 8;
           cellwidth = (screenHeight-10)/Gridcells;
+          focusfilename = "AAAA";
           ClearGrid();
           Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
         }
@@ -336,6 +358,7 @@ int main() {
         {
           Gridcells = 16;
           cellwidth = (screenHeight-10)/Gridcells;
+          focusfilename = "AAAA";
           ClearGrid();
           Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
         }
@@ -343,6 +366,7 @@ int main() {
         {
           Gridcells = 24;
           cellwidth = (screenHeight-10)/Gridcells;
+          focusfilename = "AAAA";
           ClearGrid();
           Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
         }
@@ -350,8 +374,17 @@ int main() {
         {
           Gridcells = 32;
           cellwidth = (screenHeight-10)/Gridcells;
+          focusfilename = "AAAA";
           ClearGrid();
           Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+        }
+        if ( IsKeyPressed(KEY_C) and (IsKeyDown(KEY_LEFT_CONTROL) or IsKeyDown(KEY_RIGHT_CONTROL) ) )
+        {
+          CopyGrid();
+        }
+        if ( IsKeyPressed(KEY_V) and (IsKeyDown(KEY_LEFT_CONTROL) or IsKeyDown(KEY_RIGHT_CONTROL) ) )
+        {
+          PasteGrid();
         }
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
@@ -404,6 +437,8 @@ int main() {
          DrawText("<Up Arrow> - Next Picture",800,280,10, WHITE);
          DrawText("<Down Arrow> - Previous Picture",800,300,10, WHITE);
          DrawText("<1,2,3,4> - 8x8, 16x16, 24x24, 32x32",800,320,10, WHITE);
+         DrawText("<Ctrl-C> - Copy Frame",800,340,10, WHITE);
+         DrawText("<Ctrl-V> - Paste Frame",800,360,10, WHITE);
          drawCharfromGrid(790, 10, 1);
          drawCharfromGrid(790+Gridcells*2, 10, 2);
          drawCharfromGrid(790+Gridcells*2+Gridcells*3, 10, 3);
