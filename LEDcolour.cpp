@@ -288,6 +288,48 @@ void Outputtofile(string filename)
       }
 }
 
+string byteToHex(unsigned char b) 
+{
+    const char* hex = "0123456789ABCDEF";
+    std::string out;
+    out += hex[(b >> 4) & 0xF];
+    out += hex[b & 0xF];
+    return out;
+}
+
+string ColorToHex(Color c) 
+{
+    string s = "#";
+    s += byteToHex(c.r);
+    s += byteToHex(c.g);
+    s += byteToHex(c.b);
+    return s;
+}
+
+
+void OutputtoPythonfile(string filename)
+{
+  ofstream outobject(filename); // file writer object --- file closes automatically when out of scope
+  bool firstfound = false;
+  if (!outobject)
+  {
+    cout << "Error: Could not output to file " << filename << "\n";
+    return;
+  }
+  outobject << filename << " = [";
+  for (int j = 0; j< Gridcells; j++)
+      for (int i = 0; i< Gridcells; i++)
+      { 
+         if (Grid[j][i] != 0)
+         {
+          if (firstfound == true) {outobject << ", ";}
+          outobject << "(" << i << "," << j << ", \"" << ColorToHex(getColour(Grid[j][i])) << "\")";
+          firstfound = true;
+         }
+      }
+  outobject << "]";
+}
+
 void Readfromfile(string filename)
 {
   int cellx,celly, value;
@@ -386,6 +428,10 @@ int main() {
         {
           PasteGrid();
         }
+        if ( IsKeyPressed(KEY_P) )
+        {
+          OutputtoPythonfile("dataPython/"+focusfilename+to_string(Gridcells)+".txt");
+        }
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
           if (MousePos.x < screenHeight) // draw on grid
@@ -439,6 +485,7 @@ int main() {
          DrawText("<1,2,3,4> - 8x8, 16x16, 24x24, 32x32",800,320,10, WHITE);
          DrawText("<Ctrl-C> - Copy Frame",800,340,10, WHITE);
          DrawText("<Ctrl-V> - Paste Frame",800,360,10, WHITE);
+         DrawText("<p> - Export to Python list",800,380,10, WHITE);
          drawCharfromGrid(790, 10, 1);
          drawCharfromGrid(790+Gridcells*2, 10, 2);
          drawCharfromGrid(790+Gridcells*2+Gridcells*3, 10, 3);
