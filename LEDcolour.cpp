@@ -12,6 +12,7 @@
 // raylib uses float for most numbers, and so use 2.0f to convert int to float. Note that 2.0 will be a double
 
 
+// Remove "filename = " in python export
 // Draw eraser with this program!!! store as charEraser
 // output as python text
 
@@ -36,6 +37,8 @@ string focusfilename = "AAAA";
 string mystring;
 // note that mystring.c_str() converts the C++ string mystring to the C array of characters
 
+string dataloc = "/home/jimby-linux/Documents/C++/LEDColour/data/";
+string datalocPython = "/home/jimby-linux/Documents/C++/LEDColour/dataPython/";
 
 
 Color HexToColour(int hexValue) {
@@ -357,36 +360,36 @@ int main() {
     Vector2 MousePos;
     SetTargetFPS(60);
     ClearGrid();
-    Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+    Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
     while (!WindowShouldClose()) 
     {
         if (IsKeyPressed(KEY_SPACE))
         {
-             Outputtofile("data/"+focusfilename+to_string(Gridcells)+".txt");
+             Outputtofile(dataloc+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsKeyPressed(KEY_RIGHT))
         {
              IncHorFilename();
              ClearGrid();
-             Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+             Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsKeyPressed(KEY_UP))
         {
              IncVertFilename();
              ClearGrid();
-             Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+             Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsKeyPressed(KEY_LEFT))
         {
              DecHorFilename();
              ClearGrid();
-             Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+             Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsKeyPressed(KEY_DOWN))
         {
              DecVertFilename();
              ClearGrid();
-             Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+             Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsKeyPressed(KEY_ONE))
         {
@@ -394,7 +397,7 @@ int main() {
           cellwidth = (screenHeight-10)/Gridcells;
           focusfilename = "AAAA";
           ClearGrid();
-          Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+          Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsKeyPressed(KEY_TWO))
         {
@@ -402,7 +405,7 @@ int main() {
           cellwidth = (screenHeight-10)/Gridcells;
           focusfilename = "AAAA";
           ClearGrid();
-          Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+          Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsKeyPressed(KEY_THREE))
         {
@@ -410,7 +413,7 @@ int main() {
           cellwidth = (screenHeight-10)/Gridcells;
           focusfilename = "AAAA";
           ClearGrid();
-          Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+          Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsKeyPressed(KEY_FOUR))
         {
@@ -418,7 +421,7 @@ int main() {
           cellwidth = (screenHeight-10)/Gridcells;
           focusfilename = "AAAA";
           ClearGrid();
-          Readfromfile("data/"+focusfilename+to_string(Gridcells)+".txt");
+          Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
         }
         if ( IsKeyPressed(KEY_C) and (IsKeyDown(KEY_LEFT_CONTROL) or IsKeyDown(KEY_RIGHT_CONTROL) ) )
         {
@@ -428,9 +431,13 @@ int main() {
         {
           PasteGrid();
         }
+        if ( IsKeyPressed(KEY_D) and (IsKeyDown(KEY_LEFT_CONTROL) or IsKeyDown(KEY_RIGHT_CONTROL) ) )
+        {
+          ClearGrid();
+        }
         if ( IsKeyPressed(KEY_P) )
         {
-          OutputtoPythonfile("dataPython/"+focusfilename+to_string(Gridcells)+".txt");
+          OutputtoPythonfile(datalocPython+focusfilename+to_string(Gridcells)+".txt");
         }
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
@@ -483,9 +490,10 @@ int main() {
          DrawText("<Up Arrow> - Next Picture",800,280,10, WHITE);
          DrawText("<Down Arrow> - Previous Picture",800,300,10, WHITE);
          DrawText("<1,2,3,4> - 8x8, 16x16, 24x24, 32x32",800,320,10, WHITE);
-         DrawText("<Ctrl-C> - Copy Frame",800,340,10, WHITE);
-         DrawText("<Ctrl-V> - Paste Frame",800,360,10, WHITE);
-         DrawText("<p> - Export to Python list",800,380,10, WHITE);
+         DrawText("<Ctrl-c> - Copy Frame",800,340,10, WHITE);
+         DrawText("<Ctrl-v> - Paste Frame",800,360,10, WHITE);
+         DrawText("<Ctrl-d> - Clear Frame",800,380,10, WHITE);
+         DrawText("<p> - Export to Python list",800,400,10, WHITE);
          drawCharfromGrid(790, 10, 1);
          drawCharfromGrid(790+Gridcells*2, 10, 2);
          drawCharfromGrid(790+Gridcells*2+Gridcells*3, 10, 3);
