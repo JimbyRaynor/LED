@@ -12,7 +12,6 @@
 // raylib uses float for most numbers, and so use 2.0f to convert int to float. Note that 2.0 will be a double
 
 
-// Remove "filename = " in python export
 // Draw eraser with this program!!! store as charEraser
 // output as python text
 
@@ -31,6 +30,7 @@ int palettex = screenWidth - 3*40-20;
 int palettey = 20;
 int palcellx = 0;
 int palcelly = 0;
+bool modified = false;
 
 string focusfilename = "AAAA";
 
@@ -289,6 +289,7 @@ void Outputtofile(string filename)
           outobject << i << " " << j << " " << Grid[j][i] << "\n";
          }
       }
+  cout << "Saved. \n";
 }
 
 string byteToHex(unsigned char b) 
@@ -319,7 +320,7 @@ void OutputtoPythonfile(string filename)
     cout << "Error: Could not output to file " << filename << "\n";
     return;
   }
-  outobject << filename << " = [";
+  outobject << " = [";
   for (int j = 0; j< Gridcells; j++)
       for (int i = 0; i< Gridcells; i++)
       { 
@@ -352,6 +353,18 @@ while (inobject >> cellx >> celly >> value)
  }
 }
 
+
+void Load()
+{
+  ClearGrid();
+  Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
+}
+
+void Save()
+{
+  if (modified == true){Outputtofile(dataloc+focusfilename+to_string(Gridcells)+".txt");}
+  modified = false;
+}
      
 int main() {
     mystring = "Hello there string";
@@ -365,63 +378,63 @@ int main() {
     {
         if (IsKeyPressed(KEY_SPACE))
         {
-             Outputtofile(dataloc+focusfilename+to_string(Gridcells)+".txt");
+             Save();
         }
         if (IsKeyPressed(KEY_RIGHT))
         {
+             Save();
              IncHorFilename();
-             ClearGrid();
-             Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
+             Load();
         }
         if (IsKeyPressed(KEY_UP))
         {
+             Save();
              IncVertFilename();
-             ClearGrid();
-             Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
+             Load();
         }
         if (IsKeyPressed(KEY_LEFT))
         {
+             Save();
              DecHorFilename();
-             ClearGrid();
-             Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
+             Load();
         }
         if (IsKeyPressed(KEY_DOWN))
         {
+             Save();
              DecVertFilename();
-             ClearGrid();
-             Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
+             Load();
         }
         if (IsKeyPressed(KEY_ONE))
         {
+          Save();
           Gridcells = 8;
           cellwidth = (screenHeight-10)/Gridcells;
           focusfilename = "AAAA";
-          ClearGrid();
-          Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
+          Load();
         }
         if (IsKeyPressed(KEY_TWO))
         {
+          Save();
           Gridcells = 16;
           cellwidth = (screenHeight-10)/Gridcells;
           focusfilename = "AAAA";
-          ClearGrid();
-          Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
+          Load();
         }
         if (IsKeyPressed(KEY_THREE))
         {
+          Save();
           Gridcells = 24;
           cellwidth = (screenHeight-10)/Gridcells;
           focusfilename = "AAAA";
-          ClearGrid();
-          Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
+          Load();
         }
         if (IsKeyPressed(KEY_FOUR))
         {
+          Save();
           Gridcells = 32;
           cellwidth = (screenHeight-10)/Gridcells;
           focusfilename = "AAAA";
-          ClearGrid();
-          Readfromfile(dataloc+focusfilename+to_string(Gridcells)+".txt");
+          Load();
         }
         if ( IsKeyPressed(KEY_C) and (IsKeyDown(KEY_LEFT_CONTROL) or IsKeyDown(KEY_RIGHT_CONTROL) ) )
         {
@@ -447,6 +460,7 @@ int main() {
            celly = (MousePos.y-starty)/cellwidth;
            if ( (cellx >= 0) and (celly >= 0) and (cellx < Gridcells) and (celly < Gridcells) )
            {
+             modified = true;
              if (selectedcolourindex != 32) // 32 is rberaser
                 Grid[celly][cellx] = selectedcolourindex;
               else
