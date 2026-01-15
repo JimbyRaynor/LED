@@ -12,8 +12,9 @@
 // raylib uses float for most numbers, and so use 2.0f to convert int to float. Note that 2.0 will be a double
 
 
+// compare numerical xdistance to Maths xdistance
 // Draw eraser with this program!!! store as charEraser
-// output as python text
+
 
 using namespace std;
 
@@ -265,6 +266,15 @@ void CopyGrid()
          Grid2[j][i] = Grid[j][i];
 }
 
+int CountNonzeroinGrid()
+{
+  int count = 0;
+  for (int j = 0; j< Gridcells; j++)
+      for (int i = 0; i< Gridcells; i++) 
+         if (Grid[j][i] != 0){ count++; }
+  return count;      
+}
+
 void PasteGrid()
 {
   for (int j = 0; j< Gridcells; j++)
@@ -334,6 +344,25 @@ void OutputtoPythonfile(string filename)
   outobject << "]";
 }
 
+string GetAniPython(int i)
+{
+  string outstring;
+  bool firstfound = false;
+  outstring = "char"+to_string(i)+" = [";
+  for (int j = 0; j< Gridcells; j++)
+      for (int i = 0; i< Gridcells; i++)
+      { 
+         if (Grid[j][i] != 0)
+         {
+          if (firstfound == true) {outstring += ", ";}
+          outstring += "(" + to_string(i)+"," + to_string(j) + ", \"" + ColorToHex(getColour(Grid[j][i])) + "\")";
+          firstfound = true;
+         }
+      }
+  outstring  += "] \n";
+  return outstring;
+}
+
 void Readfromfile(string filename)
 {
   int cellx,celly, value;
@@ -367,7 +396,6 @@ void Save()
 }
      
 int main() {
-    mystring = "Hello there string";
     InitWindow(screenWidth, screenHeight, "LEDColour");
     int cellx, celly;
     Vector2 MousePos;
@@ -442,15 +470,39 @@ int main() {
         }
         if ( IsKeyPressed(KEY_V) and (IsKeyDown(KEY_LEFT_CONTROL) or IsKeyDown(KEY_RIGHT_CONTROL) ) )
         {
+          modified = true;
           PasteGrid();
         }
         if ( IsKeyPressed(KEY_D) and (IsKeyDown(KEY_LEFT_CONTROL) or IsKeyDown(KEY_RIGHT_CONTROL) ) )
         {
+          modified = true;
           ClearGrid();
         }
         if ( IsKeyPressed(KEY_P) )
         {
           OutputtoPythonfile(datalocPython+focusfilename+to_string(Gridcells)+".txt");
+        }
+        if (IsKeyPressed(KEY_P) and (IsKeyDown(KEY_LEFT_CONTROL) or IsKeyDown(KEY_RIGHT_CONTROL) ))
+        {
+          cout << CountNonzeroinGrid() << "\n";
+          ofstream outobject(datalocPython+focusfilename+to_string(Gridcells)+".txt");
+          Save();
+          int i = 1;
+          string outstring = "";
+          while (CountNonzeroinGrid() != 0)
+          { 
+             outstring += GetAniPython(i);
+             IncHorFilename();
+             Load();
+             i++;
+          }    
+          if (!outobject)
+          {
+            cout << "Error: Could not output to file \n";
+           }
+          DecHorFilename();
+          Load();
+          outobject << outstring;
         }
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
@@ -508,6 +560,8 @@ int main() {
          DrawText("<Ctrl-v> - Paste Frame",800,360,10, WHITE);
          DrawText("<Ctrl-d> - Clear Frame",800,380,10, WHITE);
          DrawText("<p> - Export to Python list",800,400,10, WHITE);
+         DrawText("<Ctrl-p> - Export animation to first non-blank",800,420,10, WHITE);
+         DrawText("                 frame (to Python list)",800,434,10, WHITE);
          drawCharfromGrid(790, 10, 1);
          drawCharfromGrid(790+Gridcells*2, 10, 2);
          drawCharfromGrid(790+Gridcells*2+Gridcells*3, 10, 3);
