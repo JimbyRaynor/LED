@@ -12,7 +12,7 @@
 // raylib uses float for most numbers, and so use 2.0f to convert int to float. Note that 2.0 will be a double
 
 
-// compare numerical xdistance to Maths xdistance
+
 // Draw eraser with this program!!! store as charEraser
 
 
@@ -40,6 +40,7 @@ string mystring;
 
 string dataloc = "/home/jimby-linux/Documents/C++/LEDColour/data/";
 string datalocPython = "/home/jimby-linux/Documents/C++/LEDColour/dataPython/";
+string datalocC = "/home/jimby-linux/Documents/C++/LEDColour/dataC/";
 
 
 Color HexToColour(int hexValue) {
@@ -100,6 +101,8 @@ string AllColourwords[60] = {"light blue", "blue", "dark blue", "light red", "re
                        "light aqua", "aqua", "dark aqua", "light purple", "purple", "dark purple", "black", "eraser", "white"};                       
 
 int selectedcolourindex = 1;
+
+int Char1[64] = {1,18,23,23,23,23,18,18,1,18,18,23,23,23,18,18,14,16,16,16,16,16,16,16,17,16,0,0,16,0,0,16,0,16,0,0,16,0,0,16,0,16,16,16,16,16,16,16,0,18,1,1,1,1,17,17,23,23,23,18,18,18,23,23};
 
 void IncHorFilename()
 {
@@ -242,7 +245,19 @@ void drawCharfromGrid(int previewx, int previewy, int psize)
               DrawRectangle(previewx+i*psize,previewy+j*psize,psize,psize,Mycolour);
             }        
      }
-
+     
+void drawCharfromArray(int previewx, int previewy, int psize, int bitwidth, int myarray[])
+     {
+       Color Mycolour;
+       int loc = 0;
+       for (int i=0;i < bitwidth; i++ )
+         for (int j=0; j < bitwidth; j++)
+            {
+              Mycolour = getColour(myarray[loc]);
+              DrawRectangle(previewx+j*psize,previewy+i*psize,psize,psize,Mycolour);
+              loc++;
+            }        
+     }
 
 void ClearGrid()
 {
@@ -342,6 +357,25 @@ void OutputtoPythonfile(string filename)
          }
       }
   outobject << "]";
+}
+
+void OutputtoCfile(string filename)
+{
+  ofstream outobject(filename); // file writer object --- file closes automatically when out of scope
+  if (!outobject)
+  {
+    cout << "Error: Could not output to file " << filename << "\n";
+    return;
+  }
+  outobject << "int myarray[" << Gridcells*Gridcells << "] = {";
+  for (int j = 0; j< Gridcells; j++)
+      for (int i = 0; i< Gridcells; i++)
+      { 
+          outobject << Grid[j][i];
+          if ((i != Gridcells - 1) or (j != Gridcells - 1)) 
+             { outobject << ",";}
+      }
+  outobject << "};";
 }
 
 string GetAniPython(int i)
@@ -482,6 +516,10 @@ int main() {
         {
           OutputtoPythonfile(datalocPython+focusfilename+to_string(Gridcells)+".txt");
         }
+        if (IsKeyPressed(KEY_C))
+        {
+          OutputtoCfile(datalocC+focusfilename+to_string(Gridcells)+".txt");
+        }
         if (IsKeyPressed(KEY_P) and (IsKeyDown(KEY_LEFT_CONTROL) or IsKeyDown(KEY_RIGHT_CONTROL) ))
         {
           cout << CountNonzeroinGrid() << "\n";
@@ -562,9 +600,11 @@ int main() {
          DrawText("<p> - Export to Python list",800,400,10, WHITE);
          DrawText("<Ctrl-p> - Export animation to first non-blank",800,420,10, WHITE);
          DrawText("                 frame (to Python list)",800,434,10, WHITE);
-         drawCharfromGrid(790, 10, 1);
-         drawCharfromGrid(790+Gridcells*2, 10, 2);
-         drawCharfromGrid(790+Gridcells*2+Gridcells*3, 10, 3);
+         DrawText("<c> - Export to C Array",800,450,10, WHITE);
+         drawCharfromGrid(800, 10, 1);
+         drawCharfromGrid(800+Gridcells*2, 10, 2);
+         drawCharfromGrid(800+Gridcells*2+Gridcells*3, 10, 3);
+         drawCharfromArray(800, 100, 3,8, Char1);
         EndDrawing();
     }
 
