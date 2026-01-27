@@ -88,6 +88,8 @@ int gridwidth = 50;
 float griddensity = 0.35f;
 float herox = (gridsize-1)*gridwidth+(gridwidth-24)/2;
 float heroy = (gridsize-1)*gridwidth+(gridwidth-24)/2;
+int   gridherox = gridsize-1;
+int   gridheroy = gridsize-1;
 
 
 void fillgrid(float density)
@@ -137,6 +139,22 @@ void drawgrid()
        }
 }
 
+int pushblock(int x, int y, int dx, int dy)
+{
+   if (x+2*dx >= 0 and y+2*dy >=0) 
+    if (Grid[y+dy][x+dx] == 1)
+    {
+      if  (Grid[y+2*dy][x+2*dx] == 0 )
+      {
+       Grid[y+2*dy][x+2*dx]  = 1;
+       Grid[y+dy][x+dx]  = 0; 
+       return 0;
+      }
+      else return -1;
+    }
+   return 0;
+}
+
 int main() {
     int c = 0;
     InitWindow(screenWidth, screenHeight, "Blocks");
@@ -150,20 +168,36 @@ int main() {
              c++;
         }
         if (IsKeyPressed(KEY_RIGHT))
-        {
-             herox += gridwidth;
+        {    
+             if (pushblock(gridherox, gridheroy, 1, 0) >= 0)
+             {
+              herox += gridwidth;
+              gridherox++;
+             }
         }
         if (IsKeyPressed(KEY_UP))
         {
-             heroy -= gridwidth;
+             if (pushblock(gridherox, gridheroy, 0, -1) >= 0)
+             { 
+              heroy -= gridwidth;
+              gridheroy--;
+             }
         }
         if (IsKeyPressed(KEY_LEFT))
         {
-             herox -= gridwidth;
+             if (pushblock(gridherox, gridheroy, -1, 0) >= 0)
+             {           
+              herox -= gridwidth;
+              gridherox--;
+             }
         }
         if (IsKeyPressed(KEY_DOWN))
         {
-             heroy += gridwidth;
+             if (pushblock(gridherox, gridheroy, 0, 1) >= 0)
+             {
+              heroy += gridwidth;
+              gridheroy++;
+             }
         }
         if (IsKeyPressed(KEY_ONE))
         {
