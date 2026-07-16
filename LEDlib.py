@@ -153,11 +153,23 @@ def ShowColourScore(canvas,x,y,colour, myscore, LEDpoints,numzeros=9):
     for i,c in enumerate(stringscore):
        createCharBlockColour(canvas,x+i*charwidth,y,colour,digits[int(c)], LEDpoints)
 
-def ShowColourScore2(canvas,x,y,colour, myscore, LEDpoints,numzeros=9,solid=False,bg=True):
+def ShowColourScore2(canvas,x,y,colour, myscore, LEDpoints,numzeros=9,solid=False,bg=True, square= False):
     digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
     stringscore = str(myscore).zfill(numzeros) 
     for i,c in enumerate(stringscore):
-       createCharBlockColour2(canvas,x+i*charwidth,y,colour,digits[int(c)], LEDpoints, solid = solid, bg = bg)
+       createCharBlockColour2(canvas,x+i*charwidth,y,colour,digits[int(c)], LEDpoints, solid = solid, bg = bg, square=square)
+
+def ShowColourScoredp(canvas,x,y,colour, myscore, LEDpoints,numzeros=9,solid=False,bg=True, square= False):
+    digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
+    stringscore = str(int(myscore)).zfill(numzeros) 
+    for i,c in enumerate(stringscore):
+       createCharBlockColour2(canvas,x+i*charwidth,y,colour,digits[int(c)], LEDpoints, solid = solid, bg = bg, square=square)
+    createCharBlockColour2(canvas,x+len(stringscore)*charwidth-int(3*charwidth/8),y,colour,charDot, LEDpoints, solid = solid, bg = bg, square=square)
+    if int(myscore) == myscore:
+      mydigit = "0"
+    else:
+      mydigit  = str(myscore).split(".")[1][0]
+    createCharBlockColour2(canvas,x+len(stringscore)*charwidth+int(3*charwidth/8),y,colour,digits[int(mydigit)], LEDpoints, solid = solid, bg = bg, square=square)
 
 def pygameShowColourScore2(canvas,x,y,colour, myscore,numzeros=9,solid=False):
     digits = [ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE]
@@ -416,6 +428,10 @@ class LEDobj:
          self.pixelsize = pixelsize
          psize = self.pixelsize
          createCharColourSolid(canvas,x,y,CharPoints,self.LEDPoints)
+    def loadchar(self, NewChar):
+        self.OriginalCharPoints = NewChar
+        self.CharPoints = NewChar.copy()
+        self.draw() 
     def resetposition(self,x,y):
         self.x, self.y = x,y
         self.dx, self.dy = 0,0
@@ -459,7 +475,7 @@ class LEDobj:
          self.collisionlinesimage = self.canvas.create_polygon(flatpoints, outline="white", width=2)
 
 class LEDscoreobj:
-    def __init__(self, canvas,x=0,y=0, score = 0, colour = "white", pixelsize = 2, charwidth=23, numzeros = 0, solid = False, bg = True):
+    def __init__(self, canvas,x=0,y=0, score = 0, colour = "white", pixelsize = 2, charwidth=23, numzeros = 0, solid = False, bg = True, square = False):
          self.x = x
          self.y = y
          self.score = score
@@ -471,13 +487,14 @@ class LEDscoreobj:
          self.numzeros = numzeros 
          self.solid = solid
          self.bg = bg
+         self.square = square
          self.draw()
     def draw(self):
         global psize, charwidth
         self.undraw()
         charwidth = self.charwidth
         psize = self.pixelsize
-        ShowColourScore2(self.canvas,self.x,self.y,self.colour,self.score,self.LEDPoints, self.numzeros, self.solid, self.bg) 
+        ShowColourScore2(self.canvas,self.x,self.y,self.colour,self.score,self.LEDPoints, self.numzeros, self.solid, self.bg, self.square) 
     def undraw(self):
          for p in self.LEDPoints:
             self.canvas.delete(p)
@@ -486,3 +503,31 @@ class LEDscoreobj:
         self.score = myscore
         self.draw()
 
+class LEDscoreobjdp:
+    def __init__(self, canvas,x=0,y=0, score = 0.0, colour = "white", pixelsize = 2, charwidth=23, numzeros = 0, solid = False, bg = True, square = False):
+         self.x = x
+         self.y = y
+         self.score = score
+         self.canvas = canvas
+         self.LEDPoints = []
+         self.colour = colour
+         self.pixelsize = pixelsize
+         self.charwidth = charwidth
+         self.numzeros = numzeros 
+         self.solid = solid
+         self.bg = bg
+         self.square = square
+         self.draw()
+    def draw(self):
+        global psize, charwidth
+        self.undraw()
+        charwidth = self.charwidth
+        psize = self.pixelsize
+        ShowColourScoredp(self.canvas,self.x,self.y,self.colour,self.score,self.LEDPoints, self.numzeros, self.solid, self.bg, self.square) 
+    def undraw(self):
+         for p in self.LEDPoints:
+            self.canvas.delete(p)
+         self.LEDPoints.clear()
+    def update(self,myscore):
+        self.score = myscore
+        self.draw()
